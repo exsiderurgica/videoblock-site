@@ -199,3 +199,48 @@ footer{padding:34px 0 50px;display:flex;justify-content:space-between;color:#667
   .support-grid{grid-template-columns:1fr}
   .signup{width:100%}.signup-controls{flex-direction:column}.signup button{width:100%}
 }
+
+
+/* Real VideoBlock screenshots */
+.hero-device.real-ui{perspective:none;align-items:center}
+.app-shot{margin:0;position:relative}
+.app-shot img{
+  display:block;width:100%;height:auto;background:#020403;
+  border:1px solid #2a6140;box-shadow:0 30px 100px rgba(0,0,0,.5),0 0 80px rgba(71,224,124,.07)
+}
+.hero-shot{width:min(430px,100%)}
+.hero-shot img{border-radius:24px}
+.app-shot figcaption{
+  display:flex;justify-content:space-between;gap:16px;margin-top:12px;
+  color:#6f8b79;font:600 8px/1.4 ui-monospace,monospace;letter-spacing:.12em
+}
+.app-shot figcaption b{color:var(--green2)}
+.real-screen-panel{
+  display:grid;grid-template-columns:minmax(260px,430px) 1fr;gap:48px;align-items:center;
+  border:1px solid #244e34;background:#040a07;padding:28px
+}
+.real-screen-panel.reverse{grid-template-columns:1fr minmax(260px,430px)}
+.feature-shot{width:100%}
+.feature-shot img{border-radius:12px}
+.real-screen-copy{max-width:600px}
+.real-screen-copy h3{font-size:clamp(28px,4vw,46px);line-height:1;margin:14px 0 16px}
+.real-screen-copy p{color:#94a99d;line-height:1.8;margin:0}
+.screen-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.screen-tags span{
+  padding:9px 11px;border:1px solid #214d32;color:#9eb5a5;
+  font:600 8px ui-monospace,monospace;letter-spacing:.08em
+}
+@media(max-width:900px){
+  .hero-device.real-ui{justify-content:flex-start}
+  .hero-shot{width:min(390px,100%)}
+  .real-screen-panel,.real-screen-panel.reverse{grid-template-columns:1fr;gap:28px}
+  .feature-shot{width:min(430px,100%)}
+  .real-screen-panel.reverse .real-screen-copy{order:2}
+  .real-screen-panel.reverse .feature-shot{order:1}
+}
+@media(max-width:620px){
+  .hero-shot{width:100%}
+  .hero-shot img,.feature-shot img{border-radius:14px}
+  .real-screen-panel{padding:14px}
+  .app-shot figcaption{font-size:7px}
+}
