@@ -244,3 +244,59 @@ footer{padding:34px 0 50px;display:flex;justify-content:space-between;color:#667
   .real-screen-panel{padding:14px}
   .app-shot figcaption{font-size:7px}
 }
+
+
+/* Mobile screenshot sizing hardening */
+html,body{max-width:100%;overflow-x:hidden}
+.hero,.hero-device,.app-shot,.real-screen-panel,.real-screen-copy,.feature-shot{min-width:0;max-width:100%}
+.app-shot{overflow:hidden}
+.app-shot img{
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  margin:0 auto;
+}
+.real-screen-panel{overflow:hidden}
+
+@media(max-width:620px){
+  .hero-device.real-ui{
+    width:100%;
+    max-width:100%;
+    justify-content:center;
+  }
+  .hero-shot,.feature-shot{
+    width:min(100%,300px);
+    max-width:300px;
+    margin-inline:auto;
+  }
+  .real-screen-panel,.real-screen-panel.reverse{
+    width:100%;
+    max-width:100%;
+    padding:12px;
+    gap:22px;
+    overflow:hidden;
+  }
+  .real-screen-copy{
+    width:100%;
+    max-width:100%;
+  }
+  .app-shot img{
+    width:100%;
+    max-width:100%;
+    height:auto;
+  }
+  .app-shot figcaption{
+    width:100%;
+    flex-wrap:wrap;
+    gap:6px 12px;
+  }
+}
+
+@media(max-width:380px){
+  .hero-shot,.feature-shot{
+    width:min(100%,280px);
+    max-width:280px;
+  }
+}
