@@ -1,0 +1,48 @@
+name: Publish VideoBlock Beta 4.19 stable APK
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/publish-stable-4-19.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout downloads branch
+        uses: actions/checkout@v4
+        with:
+          ref: downloads
+          fetch-depth: 0
+
+      - name: Download and verify Beta 4.19 artifact
+        run: |
+          curl -L --fail --retry 3 'https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-6e60-820a-a070-64d91a28d88a/raw?se=2026-09-29T10%3A35%3A11Z&sp=r&sv=2026-02-06&sr=b&scid=d8f50469-c044-5a3a-97bc-3d7ebfd35de8&skoid=b5d2651b-fef3-4bb0-a03b-ca59cc22929b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-29T08%3A48%3A12Z&ske=2026-09-30T08%3A48%3A12Z&sks=b&skv=2026-02-06&sig=fkzPRYFrfK3BDfgBRhji6vK22thv/Z5wz/W79WNJTg0%3D' -o /tmp/VideoBlock-beta4.19.zip
+          rm -rf /tmp/videoblock-stable
+          mkdir -p /tmp/videoblock-stable
+          unzip -j /tmp/VideoBlock-beta4.19.zip -d /tmp/videoblock-stable
+          APK="$(find /tmp/videoblock-stable -maxdepth 1 -type f -name '*.apk' | head -n 1)"
+          test -n "$APK"
+          unzip -t "$APK" >/dev/null
+          rm -f VideoBlock-stable.apk VideoBlock-beta.apk
+          cp "$APK" VideoBlock-stable.apk
+          cat > release.json <<'JSON'
+          {
+            "stable_status": "BETA 4.19",
+            "stable_version": "0.4.19",
+            "stable_notes": "Stable Beta 4.19 adds the current Camera and RAW-audio workflow, AudioBlock recording, the dedicated Blocks page and smoother pre-buffered sequence playback between cuts.",
+            "platform": "Android"
+          }
+          JSON
+
+      - name: Publish stable build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish VideoBlock Beta 4.19 as stable"
+          git push origin downloads

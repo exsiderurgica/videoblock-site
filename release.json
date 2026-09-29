@@ -1,6 +1,6 @@
 {
-  "stable_status": "BETA 3.7",
-  "stable_version": "0.3.7",
-  "stable_notes": "Current stable VideoBlock build with the new adaptive app icon and the complete editing feature set.",
+  "stable_status": "BETA 4.19",
+  "stable_version": "0.4.19",
+  "stable_notes": "Stable Beta 4.19 adds the current Camera and RAW-audio workflow, AudioBlock recording, the dedicated Blocks page and smoother pre-buffered sequence playback between cuts.",
   "platform": "Android"
 }

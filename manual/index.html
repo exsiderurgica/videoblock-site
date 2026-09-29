@@ -36,11 +36,11 @@
 
 <main class="manual-wrap">
 <section class="manual-hero">
-  <div class="eyebrow">VIDEOBLOCK / ONLINE MANUAL / BETA 3.6</div>
+  <div class="eyebrow">VIDEOBLOCK / ONLINE MANUAL / BETA 4.19</div>
   <h1>DIRECT EDITING.<br>BLOCK LOGIC.</h1>
-  <p class="lead">This manual covers the current VideoBlock workflow: video clips, Blade cuts, Blocks, multi-clip sequences, external audio sync, standalone audio editing, transient snap, IN/OUT, loop modes, project persistence and export.</p>
+  <p class="lead">This manual covers VideoBlock Beta 4.19: video clips, Blade cuts, Blocks, smooth sequence preview, external-audio sync, standalone audio editing and recording, Camera/RAW sidecar capture, project persistence and export.</p>
   <div class="manual-nav">
-    <a href="#quick">QUICK START</a><a href="#video">VIDEO</a><a href="#blocks">BLOCKS</a><a href="#audio-sync">AUDIO SYNC</a><a href="#audio-edit">AUDIO EDIT</a><a href="#projects">PROJECTS</a><a href="#export">EXPORT</a>
+    <a href="#quick">QUICK START</a><a href="#video">VIDEO</a><a href="#blocks">BLOCKS</a><a href="#audio-sync">AUDIO SYNC</a><a href="#audio-edit">AUDIO EDIT</a><a href="#recorder">REC AUDIO</a><a href="#camera">CAMERA</a><a href="#projects">PROJECTS</a><a href="#export">EXPORT</a>
   </div>
 </section>
 
@@ -79,8 +79,10 @@
     <li><b>EXPORT</b> — exports an individual Block.</li>
     <li><b>EXPORT SEQUENCE</b> — exports the current order as one continuous movie.</li>
     <li><b>RESET ORDER</b> — restores the source Blocks to the full sequence.</li>
+    <li><b>PLAY SEQUENCE</b> — previews the current order with a pre-buffered Media3 playlist so Block boundaries no longer rebuild a player at every cut.</li>
+    <li><b>FULL</b> — the header control opens the dedicated fullscreen Blocks preview; the redundant FULL button inside the preview is not shown on the normal Blocks page.</li>
   </ul>
-  <div class="manual-callout">Adding a new clip no longer destroys the edit already prepared. New source material is appended while the current kept/deleted Block state is preserved.</div>
+  <div class="manual-callout">Adding a new clip no longer destroys the edit already prepared. New source material is appended while the current kept/deleted Block state is preserved. The Blocks preview is sized to the free area above the command panel and recalculates when orientation changes.</div>
 </section>
 
 <section id="audio-sync" class="manual-section">
@@ -110,8 +112,33 @@
   <p>AUDIO BLOCKS are independent from video Blocks. They can be cued, deleted from the audio edit and individually exported.</p>
 </section>
 
+
+<section id="recorder" class="manual-section">
+  <div class="eyebrow">06 / REC AUDIO</div>
+  <h2>AudioBlock recorder.</h2>
+  <p><span class="key">REC AUDIO</span> opens the standalone PCM WAV recorder. Choose <b>AUTO</b>, <b>PHONE MIC</b> or <b>USB-C</b> input, then monitor the live stereo waveform, L/R dBFS values and clipping before and during recording.</p>
+  <h3>Input trim</h3>
+  <p>At <b>0.0 dB</b>, the recorder labels the signal path RAW. Any non-zero INPUT TRIM is applied digitally and is explicitly marked <b>DIGITAL / NON-RAW</b>. Double-tap the trim control or label to return to 0.0 dB.</p>
+  <h3>Files</h3>
+  <p>Standalone recordings are saved as PCM WAV in <b>Music/AudioBlock</b>.</p>
+</section>
+
+<section id="camera" class="manual-section">
+  <div class="eyebrow">07 / CAMERA</div>
+  <h2>Camera with a separate RAW audio master.</h2>
+  <p><span class="key">CAMERA</span> opens the Camera2 capture screen. It supports front/rear switching, exposed lens selection, clean preview, orientation handling and native stabilization when the selected camera/mode reports support.</p>
+  <h3>Manual camera control</h3>
+  <p>Manual controls expose focus, exposure and white-balance options supported by the active device. Touch focus/exposure and orientation controls are handled inside the camera screen.</p>
+  <h3>Audio while shooting</h3>
+  <p>Select AUTO, phone mic or USB-C input and use the live L/R dBFS meter and clipping indication. INPUT TRIM follows the same rule as the recorder: 0.0 dB is the RAW path; non-zero trim is digital.</p>
+  <h3>MP4 + RAW WAV sidecar</h3>
+  <p>Each completed take saves a final <b>VideoBlock_YYYYMMDD_HHMMSS.mp4</b> in <b>Movies/VideoBlock</b> and a timestamp-matched <b>VideoBlock_YYYYMMDD_HHMMSS.wav</b> in <b>Music/VideoBlock/Camera RAW</b>. The WAV is the immutable RAW sidecar; processing used for the MP4 mix does not replace that saved RAW file.</p>
+  <h3>Monitoring and Nothing features</h3>
+  <p>Bluetooth monitoring can be enabled when a Bluetooth output is available. Glyph Mirror and REC-light controls are available only on compatible Nothing hardware / software paths and should be treated as device-dependent features.</p>
+</section>
+
 <section id="projects" class="manual-section">
-  <div class="eyebrow">06 / PROJECTS</div>
+  <div class="eyebrow">08 / PROJECTS</div>
   <h2>Save the edit, not only the files.</h2>
   <p><span class="key">SAVE PROJECT</span> writes a VideoBlock project file. <span class="key">LOAD PROJECT</span> restores it. VideoBlock also keeps an internal autosave.</p>
   <p>Project state includes source clip references, Blade positions, current Block order, deleted Blocks, external audio reference, sync offset, volumes, normalization, audio cuts, audio IN/OUT, audio/video loop state, editor position and related UI state.</p>
@@ -119,7 +146,7 @@
 </section>
 
 <section id="export" class="manual-section">
-  <div class="eyebrow">07 / EXPORT</div>
+  <div class="eyebrow">09 / EXPORT</div>
   <h2>Video and audio exports.</h2>
   <h3>Video sequence</h3>
   <p>Sequence export creates one continuous output stream. The first imported video defines the project display canvas; other source Blocks are adapted to that canvas with aspect ratio preserved when necessary.</p>
@@ -130,7 +157,7 @@
 </section>
 
 <section class="manual-section">
-  <div class="eyebrow">08 / HELP</div>
+  <div class="eyebrow">10 / HELP</div>
   <h2>Support and bug reports.</h2>
   <p>For a useful bug report, include the phone model, Android version, whether the project is single-clip or multi-clip, the source media type and the shortest repeatable sequence of actions that produces the issue.</p>
   <div class="manual-footer">

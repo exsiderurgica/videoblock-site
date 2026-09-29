@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050807">
-<meta name="description" content="VideoBlock is a block-based Android video and audio editor built for direct touch editing, accurate sync, lossless workflows and fast mobile assembly.">
+<meta name="description" content="VideoBlock is a block-based Android video, audio and camera editor built for direct touch editing, accurate sync, RAW WAV capture and fast mobile assembly.">
 <title>VideoBlock — block-based mobile video editor</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="app.css?v=34bd8977">
@@ -19,6 +19,7 @@
   <div class="nav-links">
     <a href="#blocks">BLOCKS</a>
     <a href="#audio">AUDIO</a>
+    <a href="#camera">CAMERA</a>
     <a href="#projects">PROJECTS</a>
     <a href="manual/">MANUAL</a>
     <a href="#updates">UPDATES</a>
@@ -29,18 +30,18 @@
 <main id="top">
 <section class="hero">
   <div class="hero-copy">
-    <div class="eyebrow">EXSIDERURGICA / ANDROID / <span data-release="stable_status">BETA 3.7</span></div>
+    <div class="eyebrow">EXSIDERURGICA / ANDROID / <span data-release="stable_status">BETA 4.19</span></div>
     <h1>EDIT<br>WITHOUT<br>THE TIMELINE.</h1>
-    <p class="lead">VideoBlock is a touch-first mobile editor built around clips, cuts and blocks. Scrub directly on the image, cut where you feel it, arrange the result as blocks, sync external audio precisely and export the sequence.</p>
+    <p class="lead">VideoBlock is a touch-first mobile editor built around clips, cuts and blocks. Scrub directly on the image, arrange the edit as Blocks, sync external audio precisely, record PCM WAV, shoot video with a separate RAW audio sidecar and export the sequence.</p>
     <div class="actions">
-      <a class="button primary" href="https://raw.githubusercontent.com/exsiderurgica/videoblock-site/downloads/VideoBlock-stable.apk" download>DOWNLOAD <span data-release="stable_status">BETA 3.7</span></a>
+      <a class="button primary" href="https://raw.githubusercontent.com/exsiderurgica/videoblock-site/downloads/VideoBlock-stable.apk" download>DOWNLOAD <span data-release="stable_status">BETA 4.19</span></a>
       <a class="button" href="manual/">ONLINE MANUAL</a>
       <a class="button" href="#updates">VIDEOBLOCK UPDATES</a>
       <a class="button" href="https://paypal.me/Exsiderurgica" target="_blank" rel="noopener">SUPPORT / DONATE</a>
       <a class="button" href="https://github.com/exsiderurgica/videoblock-site/issues/new" target="_blank" rel="noopener">REPORT A BUG</a>
     </div>
     <div class="release-strip">
-      <span><b>STABLE</b> <span data-release="stable_status">BETA 3.7</span></span>
+      <span><b>STABLE</b> <span data-release="stable_status">BETA 4.19</span></span>
       <span><b>PLATFORM</b> ANDROID</span>
       <span><b>WORKFLOW</b> BLOCK-BASED</span>
     </div>
@@ -117,9 +118,23 @@
   </div>
 </section>
 
-<section id="projects" class="project-section">
+
+<section id="camera" class="feature-section">
   <div class="section-head">
     <div class="section-index">04</div>
+    <div><div class="eyebrow">CAMERA / RAW AUDIO</div><h2>Shoot picture and keep the audio master.</h2></div>
+  </div>
+  <div class="feature-grid two">
+    <article><h3>CAMERA2 CAPTURE</h3><p>Rear/front camera switching, lens selection, orientation handling, clean preview and native stabilization when the active device mode supports it.</p></article>
+    <article><h3>RAW WAV SIDECAR</h3><p>Every completed camera take saves the final MP4 plus a separate timestamp-matched RAW WAV. Video is stored in Movies/VideoBlock and the RAW audio in Music/VideoBlock/Camera RAW.</p></article>
+    <article><h3>LIVE AUDIO METERS</h3><p>Select AUTO, phone mic or USB-C input and monitor L/R dBFS, waveform and clipping. At 0.0 dB input trim the recorder keeps the RAW path; non-zero trim is explicitly digital.</p></article>
+    <article><h3>MANUAL + DEVICE TOOLS</h3><p>Exposure, focus and white-balance controls are exposed when supported. Bluetooth monitoring and Nothing Glyph / REC-light functions remain device-dependent.</p></article>
+  </div>
+</section>
+
+<section id="projects" class="project-section">
+  <div class="section-head">
+    <div class="section-index">05</div>
     <div><div class="eyebrow">PROJECT MEMORY</div><h2>Leave. Return. Keep the edit.</h2></div>
   </div>
   <div class="project-panel">
@@ -139,23 +154,23 @@
 
 <section id="manual" class="resource-section">
   <div class="section-head">
-    <div class="section-index">05</div>
+    <div class="section-index">06</div>
     <div><div class="eyebrow">DOCUMENTATION</div><h2>VideoBlock Online Manual.</h2></div>
   </div>
   <div class="resource-panel">
     <div>
-      <p>The manual follows the current VideoBlock workflow: multi-clip projects, direct scrub, Blade, Blocks, external audio sync, standalone audio editing, transient snap, IN/OUT, loops, Save/Load and export.</p>
+      <p>The manual follows the current VideoBlock workflow: multi-clip projects, Blade and Blocks, smoother sequence preview, external-audio sync, standalone PCM recording, Camera/RAW sidecar capture, loops, Save/Load and export.</p>
       <div class="actions"><a class="button primary" href="manual/">OPEN ONLINE MANUAL</a><a class="button" href="https://github.com/exsiderurgica/videoblock-site/issues/new" target="_blank" rel="noopener">REPORT DOCUMENTATION ISSUE</a></div>
     </div>
     <div class="manual-index">
-      <span>01 / VIDEO + BLADE</span><span>02 / BLOCKS</span><span>03 / AUDIO SYNC</span><span>04 / AUDIO EDITOR</span><span>05 / PROJECTS</span><span>06 / EXPORT</span>
+      <span>01 / VIDEO + BLADE</span><span>02 / BLOCKS</span><span>03 / AUDIO SYNC</span><span>04 / AUDIO EDITOR</span><span>05 / REC AUDIO</span><span>06 / CAMERA</span><span>07 / PROJECTS</span><span>08 / EXPORT</span>
     </div>
   </div>
 </section>
 
 <section id="updates" class="updates-section">
   <div class="section-head">
-    <div class="section-index">06</div>
+    <div class="section-index">07</div>
     <div><div class="eyebrow">VIDEOBLOCK UPDATES</div><h2>New builds without the noise.</h2></div>
   </div>
   <p class="updates-copy">Subscribe through Brevo for new stable builds, important beta releases and major VideoBlock changes. No social feed required.</p>
@@ -176,14 +191,14 @@
 
 <section id="download" class="download-section">
   <div class="section-head">
-    <div class="section-index">07</div>
+    <div class="section-index">08</div>
     <div><div class="eyebrow">ANDROID BUILD</div><h2>Current stable build.</h2></div>
   </div>
   <div class="download-grid">
     <article class="release-card stable">
       <div class="release-type">STABLE</div>
-      <h3 data-release="stable_status">BETA 3.7</h3>
-      <p data-release="stable_notes">Current stable VideoBlock build with the new adaptive app icon and the complete editing feature set.</p>
+      <h3 data-release="stable_status">BETA 4.19</h3>
+      <p data-release="stable_notes">Stable Beta 4.19 adds the current Camera and RAW-audio workflow, AudioBlock recording, the dedicated Blocks page and smoother pre-buffered sequence playback between cuts.</p>
       <a class="button primary" href="https://raw.githubusercontent.com/exsiderurgica/videoblock-site/downloads/VideoBlock-stable.apk" download>DOWNLOAD APK</a>
     </article>
   </div>
@@ -192,7 +207,7 @@
 
 <section class="support-section">
   <div class="section-head">
-    <div class="section-index">08</div>
+    <div class="section-index">09</div>
     <div><div class="eyebrow">SUPPORT / FEEDBACK</div><h2>Support the project or break it properly.</h2></div>
   </div>
   <div class="support-grid">
