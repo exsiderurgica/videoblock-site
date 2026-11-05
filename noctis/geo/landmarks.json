@@ -1,0 +1,793 @@
+[
+  {
+    "id": "2685862365",
+    "name": "Maison Degas",
+    "local_m": [
+      -75.95,
+      69.11
+    ],
+    "tags": {
+      "name": "Maison Degas",
+      "tourism": "hotel"
+    }
+  },
+  {
+    "id": "2685865044",
+    "name": "Hotel Meublé Santa Chiara Suite",
+    "local_m": [
+      124.42,
+      53.88
+    ],
+    "tags": {
+      "addr:housenumber": "13",
+      "addr:street": "Via Santa Chiara",
+      "check_date": "2023-05-06",
+      "email": "info@santachiarasuite.com",
+      "internet_access": "wlan",
+      "name": "Hotel Meublé Santa Chiara Suite",
+      "tourism": "hotel",
+      "website": "https://www.santachiarasuite.com/it/"
+    }
+  },
+  {
+    "id": "2685876196",
+    "name": "Medea",
+    "local_m": [
+      149.26,
+      -51.82
+    ],
+    "tags": {
+      "name": "Medea",
+      "tourism": "guest_house"
+    }
+  },
+  {
+    "id": "2685913072",
+    "name": "Napoli Centro",
+    "local_m": [
+      -133.29,
+      129.78
+    ],
+    "tags": {
+      "name": "Napoli Centro",
+      "tourism": "guest_house"
+    }
+  },
+  {
+    "id": "2758744626",
+    "name": "Immacolata degli Operatori Sanitari",
+    "local_m": [
+      -134.24,
+      -119.18
+    ],
+    "tags": {
+      "amenity": "place_of_worship",
+      "denomination": "catholic",
+      "name": "Immacolata degli Operatori Sanitari",
+      "religion": "christian",
+      "start_date": "C19",
+      "wikidata": "Q3668805",
+      "wikipedia": "it:Chiesa dell'Immacolata degli Operatori Sanitari"
+    }
+  },
+  {
+    "id": "3056293738",
+    "name": "Alexander Caffe",
+    "local_m": [
+      54.39,
+      -104.65
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2026-10-16",
+      "name": "Alexander Caffe"
+    }
+  },
+  {
+    "id": "3056293743",
+    "name": "Bar Settebello",
+    "local_m": [
+      80.61,
+      -47.66
+    ],
+    "tags": {
+      "addr:housenumber": "41",
+      "addr:street": "Via San Sebastiano",
+      "amenity": "bar",
+      "check_date": "2025-10-11",
+      "indoor_seating": "yes",
+      "name": "Bar Settebello",
+      "outdoor_seating": "yes",
+      "wheelchair": "no"
+    }
+  },
+  {
+    "id": "3056293761",
+    "name": "Lombardi a Santa Chiara",
+    "local_m": [
+      110.68,
+      -46.78
+    ],
+    "tags": {
+      "amenity": "restaurant",
+      "check_date": "2025-11-09",
+      "cuisine": "pizza",
+      "name": "Lombardi a Santa Chiara"
+    }
+  },
+  {
+    "id": "3259579562",
+    "name": "Taverna del Cerriglio",
+    "local_m": [
+      -53.8,
+      94.78
+    ],
+    "tags": {
+      "addr:housenumber": "2",
+      "addr:street": "Calata Trinità Maggiore",
+      "amenity": "restaurant",
+      "name": "Taverna del Cerriglio",
+      "operator": "Ga.Ra.Mar. S.a.s.",
+      "owner": "Gallo Carlo & Co.",
+      "phone": "+39 081 5523405",
+      "ref:vatin": "IT07629190633"
+    }
+  },
+  {
+    "id": "3496486476",
+    "name": "Garage Centro Storico",
+    "local_m": [
+      -74.45,
+      89.66
+    ],
+    "tags": {
+      "access": "customers",
+      "addr:city": "Napoli",
+      "addr:housenumber": "49",
+      "addr:postcode": "80134",
+      "addr:street": "Calata Trinità Maggiore",
+      "amenity": "parking",
+      "check_date:fee": "2025-04-20",
+      "fee": "yes",
+      "name": "Garage Centro Storico",
+      "note": "Autorizzato ZTL! Traffic-calmed! Convenzionato con Hotel e aziende in Zona! Only for hotels and companies in the area with special arrangements!",
+      "parking": "sheds",
+      "park_ride": "no",
+      "phone": "+39 081 4288033",
+      "website": "http://www.garagecentrostorico.it/"
+    }
+  },
+  {
+    "id": "4505008783",
+    "name": "Liceo classico Antonio Genovesi",
+    "local_m": [
+      -75.86,
+      7.49
+    ],
+    "tags": {
+      "amenity": "school",
+      "education": "school",
+      "isced:level": "3",
+      "name": "Liceo classico Antonio Genovesi",
+      "wikidata": "Q3831899",
+      "wikipedia": "it:Liceo classico statale Antonio Genovesi"
+    }
+  },
+  {
+    "id": "4706337989",
+    "name": "monastero",
+    "local_m": [
+      105.78,
+      26.35
+    ],
+    "tags": {
+      "amenity": "restaurant",
+      "check_date": "2025-10-12",
+      "name": "monastero"
+    }
+  },
+  {
+    "id": "4762998222",
+    "name": "Galleria 19 Disco Club",
+    "local_m": [
+      40.57,
+      -132.38
+    ],
+    "tags": {
+      "amenity": "nightclub",
+      "check_date": "2026-10-16",
+      "name": "Galleria 19 Disco Club",
+      "wheelchair": "no"
+    }
+  },
+  {
+    "id": "4907650321",
+    "name": "Tandem",
+    "local_m": [
+      -61.43,
+      126.56
+    ],
+    "tags": {
+      "addr:housenumber": "10",
+      "addr:postcode": "80134",
+      "addr:street": "Calata Trinità Maggiore",
+      "amenity": "restaurant",
+      "check_date": "2025-11-09",
+      "cuisine": "italian",
+      "name": "Tandem"
+    }
+  },
+  {
+    "id": "5060513322",
+    "name": "'O Munaciello",
+    "local_m": [
+      -44.13,
+      69.07
+    ],
+    "tags": {
+      "alt_name": "O' Munaciello",
+      "amenity": "restaurant",
+      "check_date": "2025-11-09",
+      "cuisine": "pizza",
+      "name": "'O Munaciello"
+    }
+  },
+  {
+    "id": "5098735722",
+    "name": "Opera Teatrodelgusto",
+    "local_m": [
+      -48.8,
+      84.46
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "name": "Opera Teatrodelgusto",
+      "name:en": "Opera Teatrodelgusto"
+    }
+  },
+  {
+    "id": "5179063921",
+    "name": "La Taverna di Santa Chiara",
+    "local_m": [
+      90.95,
+      -8.93
+    ],
+    "tags": {
+      "addr:housenumber": "6",
+      "addr:postcode": "80134",
+      "addr:street": "Via Santa Chiara",
+      "amenity": "restaurant",
+      "check_date": "2025-11-23",
+      "cuisine": "regional",
+      "diet:vegetarian": "yes",
+      "internet_access": "no",
+      "name": "La Taverna di Santa Chiara",
+      "outdoor_seating": "no",
+      "payment:mastercard": "yes",
+      "payment:visa": "yes"
+    }
+  },
+  {
+    "id": "5486916529",
+    "name": "Costa pizzeria",
+    "local_m": [
+      -126.09,
+      55.68
+    ],
+    "tags": {
+      "amenity": "fast_food",
+      "cuisine": "pizza",
+      "indoor_seating": "yes",
+      "name": "Costa pizzeria",
+      "name:en": "Costa pizzeria",
+      "not:brand:wikidata": "Q608845",
+      "outdoor_seating": "yes"
+    }
+  },
+  {
+    "id": "6240086886",
+    "name": "Trinity Cafe",
+    "local_m": [
+      -54.34,
+      99.25
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2025-11-09",
+      "indoor_seating": "yes",
+      "name": "Trinity Cafe",
+      "outdoor_seating": "yes"
+    }
+  },
+  {
+    "id": "7020471085",
+    "name": "Rraù Strit",
+    "local_m": [
+      -92.21,
+      28.11
+    ],
+    "tags": {
+      "addr:housenumber": "18",
+      "addr:street": "Via Domenico Capitelli",
+      "amenity": "restaurant",
+      "name": "Rraù Strit",
+      "opening_hours": "24/7"
+    }
+  },
+  {
+    "id": "7147507112",
+    "name": "Pak Doner Kebab",
+    "local_m": [
+      89.88,
+      -24.98
+    ],
+    "tags": {
+      "amenity": "fast_food",
+      "check_date": "2023-05-08",
+      "diet:halal": "yes",
+      "indoor_seating": "yes",
+      "name": "Pak Doner Kebab",
+      "outdoor_seating": "yes"
+    }
+  },
+  {
+    "id": "7147507128",
+    "name": "Red marrakech",
+    "local_m": [
+      98.8,
+      0.71
+    ],
+    "tags": {
+      "amenity": "fast_food",
+      "name": "Red marrakech"
+    }
+  },
+  {
+    "id": "7177239929",
+    "name": "Sbareo",
+    "local_m": [
+      124.91,
+      60.85
+    ],
+    "tags": {
+      "amenity": "bar",
+      "name": "Sbareo"
+    }
+  },
+  {
+    "id": "7177239936",
+    "name": "Eleven Bar",
+    "local_m": [
+      140.77,
+      94.37
+    ],
+    "tags": {
+      "amenity": "bar",
+      "check_date": "2023-05-06",
+      "name": "Eleven Bar"
+    }
+  },
+  {
+    "id": "7179565916",
+    "name": "Moccia",
+    "local_m": [
+      114.49,
+      -48.35
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2025-09-28",
+      "name": "Moccia"
+    }
+  },
+  {
+    "id": "7179565921",
+    "name": "'O Barett",
+    "local_m": [
+      115.93,
+      -63.89
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2025-11-09",
+      "name": "'O Barett"
+    }
+  },
+  {
+    "id": "7179565922",
+    "name": "Caffè Di Napoli",
+    "local_m": [
+      151.22,
+      -79.63
+    ],
+    "tags": {
+      "amenity": "bar",
+      "check_date": "2025-11-09",
+      "internet_access": "no",
+      "level": "0",
+      "name": "Caffè Di Napoli",
+      "payment:cash": "yes",
+      "payment:credit_cards": "yes",
+      "payment:debit_cards": "yes",
+      "wheelchair": "limited"
+    }
+  },
+  {
+    "id": "7179565926",
+    "name": "Centrale Del Caffè",
+    "local_m": [
+      124.58,
+      -68.13
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2026-10-15",
+      "name": "Centrale Del Caffè"
+    }
+  },
+  {
+    "id": "7449210568",
+    "name": "Domus Ars",
+    "local_m": [
+      102.62,
+      12.76
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "10c",
+      "addr:street": "Via Santa Chiara",
+      "amenity": "community_centre",
+      "community_centre": "cultural_centre",
+      "contact:facebook": "https://www.facebook.com/Concerti-a-Napoli-Domus-Ars-1031826013670258/",
+      "email": "infoeventi@domusars.it",
+      "name": "Domus Ars",
+      "phone": "+39 081 34 25 603;+39 338 86 15 640",
+      "website": "https://www.domusars.it/"
+    }
+  },
+  {
+    "id": "9122713267",
+    "name": "Ragù del Tandem",
+    "local_m": [
+      150.31,
+      -70.58
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "48",
+      "addr:postcode": "80134",
+      "addr:street": "Via Benedetto Croce",
+      "amenity": "fast_food",
+      "check_date": "2026-10-15",
+      "cuisine": "pasta;regional",
+      "drive_through": "no",
+      "name": "Ragù del Tandem",
+      "outdoor_seating": "no",
+      "ref:vatin": "IT08492201218",
+      "takeaway": "yes"
+    }
+  },
+  {
+    "id": "9122713268",
+    "name": "Mobu",
+    "local_m": [
+      52.86,
+      -107.1
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "25",
+      "addr:street": "Via San Sebastiano",
+      "amenity": "fast_food",
+      "check_date": "2026-10-18",
+      "cuisine": "italian;regional",
+      "name": "Mobu",
+      "phone": "+39 081 18160842",
+      "ref:vatin": "IT08665931211"
+    }
+  },
+  {
+    "id": "9163163018",
+    "name": "Lombardi a Santa Chiara",
+    "local_m": [
+      94.1,
+      -43.55
+    ],
+    "tags": {
+      "addr:housenumber": "59",
+      "addr:postcode": "80134",
+      "addr:street": "Via Benedetto Croce",
+      "amenity": "restaurant",
+      "check_date": "2025-09-28",
+      "name": "Lombardi a Santa Chiara",
+      "opening_hours": "12:00-15:30, 19:00-00:00",
+      "phone": "+390815520780",
+      "ref:vatin": "IT08763741215",
+      "start_date": "1922",
+      "website": "https://www.lombardisantachiara.it/"
+    }
+  },
+  {
+    "id": "9671488236",
+    "name": "Foro Carolino S&B",
+    "local_m": [
+      -134.14,
+      -113.84
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "52",
+      "addr:postcode": "80135",
+      "addr:street": "Piazza Dante",
+      "air_conditioning": "yes",
+      "email": "info@forocarolino.com",
+      "guest_house": "bed_and_breakfast",
+      "internet_access": "yes",
+      "name": "Foro Carolino S&B",
+      "phone": "+393338822206",
+      "rooms": "6",
+      "tourism": "guest_house",
+      "website": "https://www.forocarolino.com/"
+    }
+  },
+  {
+    "id": "10123271939",
+    "name": "Biblioteca dell’Istituto italiano per gli studi storici",
+    "local_m": [
+      100.01,
+      -68.12
+    ],
+    "tags": {
+      "alt_name": "Biblioteca Benedetto Croce",
+      "amenity": "library",
+      "books": "academic",
+      "name": "Biblioteca dell’Istituto italiano per gli studi storici",
+      "opening_hours": "Mo-Th 09:00-17:00",
+      "operator": "Fondazione Biblioteca Benedetto Croce",
+      "website": "http://www.fondazionebenedettocroce.it/",
+      "wikidata": "Q3747146",
+      "wikipedia": "it:Fondazione Biblioteca Benedetto Croce"
+    }
+  },
+  {
+    "id": "10300749234",
+    "name": "Farmacia Carraturo",
+    "local_m": [
+      90.09,
+      -41.51
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "60",
+      "addr:postcode": "80134",
+      "addr:street": "Via Benedetto Croce",
+      "amenity": "pharmacy",
+      "healthcare": "pharmacy",
+      "name": "Farmacia Carraturo",
+      "operator": "Emilia Carraturo",
+      "ref:vatin": "IT09922371217",
+      "website": "https://farmaciacarraturoemilia.it/"
+    }
+  },
+  {
+    "id": "10756246306",
+    "name": "Enoteca",
+    "local_m": [
+      -78.95,
+      111.87
+    ],
+    "tags": {
+      "amenity": "bar",
+      "name": "Enoteca"
+    }
+  },
+  {
+    "id": "10877920482",
+    "name": "Centro Antico Ufficio Informazioni",
+    "local_m": [
+      4.84,
+      1.2
+    ],
+    "tags": {
+      "check_date": "2026-10-02",
+      "information": "office",
+      "level": "0",
+      "name": "Centro Antico Ufficio Informazioni",
+      "opening_hours": "Mo-Sa 09:00-19:00; Su 09:00-14:00",
+      "tourism": "information"
+    }
+  },
+  {
+    "id": "12206695332",
+    "name": "Peterland",
+    "local_m": [
+      -86.27,
+      127.56
+    ],
+    "tags": {
+      "amenity": "fast_food",
+      "check_date": "2024-09-28",
+      "cuisine": "burger",
+      "name": "Peterland"
+    }
+  },
+  {
+    "id": "12296090356",
+    "name": "Centro culturale «Domus Ars»",
+    "local_m": [
+      107.9,
+      8.61
+    ],
+    "tags": {
+      "amenity": "arts_centre",
+      "check_date": "2025-10-12",
+      "name": "Centro culturale «Domus Ars»",
+      "operator": "Fondazione Il Canto di Virgilio",
+      "start_date": "2010-12",
+      "website": "https://www.fondazioneilcantodivirgilio.it/domus-ars"
+    }
+  },
+  {
+    "id": "12840373482",
+    "name": "Museo dell'Opera e Chiostro di Santa Chiara",
+    "local_m": [
+      98.85,
+      27.85
+    ],
+    "tags": {
+      "board_type": "history",
+      "information": "board",
+      "language:de": "yes",
+      "language:en": "yes",
+      "language:es": "yes",
+      "language:fr": "yes",
+      "language:it": "yes",
+      "language:ja": "yes",
+      "name": "Museo dell'Opera e Chiostro di Santa Chiara",
+      "subject:wikidata": "Q810104",
+      "subject:wikipedia": "it:Basilica di Santa Chiara (Napoli)",
+      "support": "pole",
+      "tourism": "information"
+    }
+  },
+  {
+    "id": "12840373483",
+    "name": "San Francesco delle Monache",
+    "local_m": [
+      84.45,
+      -11.99
+    ],
+    "tags": {
+      "board_type": "history",
+      "information": "board",
+      "language:de": "yes",
+      "language:en": "yes",
+      "language:es": "yes",
+      "language:fr": "yes",
+      "language:it": "yes",
+      "language:ja": "yes",
+      "name": "San Francesco delle Monache",
+      "subject:wikidata": "Q1255692",
+      "subject:wikipedia": "it:Chiesa di San Francesco delle Monache",
+      "support": "pole",
+      "tourism": "information"
+    }
+  },
+  {
+    "id": "12866301197",
+    "name": "A'mbasciata",
+    "local_m": [
+      139.03,
+      -89.8
+    ],
+    "tags": {
+      "addr:city": "Napoli",
+      "addr:housenumber": "19",
+      "addr:postcode": "80134",
+      "addr:street": "Via Benedetto Croce",
+      "amenity": "community_centre",
+      "community_centre": "cultural_centre",
+      "name": "A'mbasciata",
+      "operator": "A ‘mbasciata – Associazione Culturale",
+      "operator:type": "public",
+      "website": "https://a-mbasciata.it/"
+    }
+  },
+  {
+    "id": "13290918003",
+    "name": "Bar del chiostro",
+    "local_m": [
+      26.68,
+      -26.22
+    ],
+    "tags": {
+      "amenity": "cafe",
+      "check_date": "2026-10-27",
+      "name": "Bar del chiostro"
+    }
+  },
+  {
+    "id": "13294553966",
+    "name": "CasaCinema",
+    "local_m": [
+      -137.44,
+      -34.23
+    ],
+    "tags": {
+      "addr:housenumber": "46",
+      "addr:street": "Via Cisterna dell'Olio",
+      "amenity": "cinema",
+      "bar": "yes",
+      "check_date": "2025-11-22",
+      "contact:phone": "+39 081 213 5084",
+      "contact:website": "https://www.casacinemanapoli.it/programmazione-casacinema-napoli/",
+      "email": "info@casacinemanapoli.it",
+      "name": "CasaCinema",
+      "payment:cash": "yes",
+      "payment:mastercard": "yes",
+      "payment:visa": "yes",
+      "screen": "3",
+      "toilets": "yes",
+      "toilets:wheelchair": "no",
+      "wheelchair": "no"
+    }
+  },
+  {
+    "id": "13327052367",
+    "name": "Vite Vite",
+    "local_m": [
+      -121.05,
+      21.35
+    ],
+    "tags": {
+      "amenity": "fast_food",
+      "check_date": "2026-09-28",
+      "cuisine": "kebab",
+      "name": "Vite Vite"
+    }
+  },
+  {
+    "id": "13790859343",
+    "name": "Museo dell'Opera di Santa Chiara",
+    "local_m": [
+      144.95,
+      132.01
+    ],
+    "tags": {
+      "fee": "yes",
+      "museum": "local",
+      "name": "Museo dell'Opera di Santa Chiara",
+      "tourism": "museum",
+      "wikidata": "Q3868004",
+      "wikimedia_commons": "Category:Santa Chiara (Naples) - Museum",
+      "wikipedia": "it:Museo dell'Opera di Santa Chiara"
+    }
+  },
+  {
+    "id": "14245065819",
+    "name": "Hype Bar",
+    "local_m": [
+      -121.72,
+      -33.77
+    ],
+    "tags": {
+      "addr:housenumber": "14",
+      "addr:street": "Via Cisterna dell'Olio",
+      "amenity": "bar",
+      "check_date": "2026-10-03",
+      "name": "Hype Bar"
+    }
+  },
+  {
+    "id": "14323406622",
+    "name": "Trattoria Annarè",
+    "local_m": [
+      -73.15,
+      56.7
+    ],
+    "tags": {
+      "amenity": "restaurant",
+      "name": "Trattoria Annarè"
+    }
+  }
+]

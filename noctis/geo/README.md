@@ -1,0 +1,1 @@
+NOCTIS geographical data from [OpenStreetMap](https://api.openstreetmap.org/api/0.6/map?bbox=14.25045,40.84605,14.25395,40.84855). © OpenStreetMap contributors; licensed ODbL 1.0. Extract bbox 14.25045,40.84605,14.25395,40.84855; building footprints: 121; highways: 47; mapped named POI: 48. Heights not assumed as accurate if absent.
