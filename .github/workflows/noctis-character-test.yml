@@ -1,0 +1,43 @@
+name: NOCTIS - acquire animated 3D character test asset
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/noctis-character-test.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download genuine skinned animated GLB
+        run: |
+          mkdir -p noctis/re1-prototype/assets
+          curl --fail --location --retry 3 --retry-delay 2 --max-time 120             'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb'             -o noctis/re1-prototype/assets/character-animated.glb
+          python3 - <<'PY'
+          import json,struct
+          p='noctis/re1-prototype/assets/character-animated.glb'
+          b=open(p,'rb').read()
+          assert b[:4]==b'glTF' and len(b)>40000
+          n=struct.unpack_from('<I',b,12)[0]
+          js=json.loads(b[20:20+n])
+          print('GLB bytes:',len(b))
+          print('animations:',[x.get('name') for x in js.get('animations',[])])
+          print('mesh count:',len(js.get('meshes',[])))
+          print('material names:',[x.get('name') for x in js.get('materials',[])])
+          assert len(js.get('skins',[]))>0
+          assert any('Walk' in x.get('name','') for x in js.get('animations',[]))
+          PY
+      - name: Commit model to temporary NOCTIS prototype only
+        run: |
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git add noctis/re1-prototype/assets/character-animated.glb
+          if ! git diff --cached --quiet; then
+            git commit -m 'NOCTIS: add MIT-licensed animated humanoid test model'
+            git push
+          fi
