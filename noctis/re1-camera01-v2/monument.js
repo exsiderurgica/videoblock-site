@@ -6,6 +6,25 @@ export function makeGuglia({THREE,world,mat,add,box,cylinder,ball,curve,collider
   const ivory=material(0xcac4b9),cream=material(0xe4ded1),
         aged=material(0x88837d),shade=material(0x716e6b),
         copper=mat.copper;
+  // In-house procedural weathered marble map: no external photo, consistent UV.
+  const surface=document.createElement('canvas');surface.width=surface.height=512;
+  const painter=surface.getContext('2d');painter.fillStyle='#d7d0bf';painter.fillRect(0,0,512,512);
+  let seed=556177;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+  for(let k=0;k<32000;k++){
+    const x=random()*512,y=random()*512,rad=.3+random()*2.3;
+    painter.fillStyle=random()<.57?'rgba(69,56,49,'+(random()*.075)+')':'rgba(252,242,225,'+(random()*.12)+')';
+    painter.fillRect(x,y,rad*2,rad*.9);
+  }
+  for(let k=0;k<390;k++){
+    let x=random()*512,y=random()*512;
+    painter.strokeStyle='rgba(66,59,55,'+(.015+random()*.08)+')';
+    painter.lineWidth=.4+random()*1.3;painter.beginPath();painter.moveTo(x,y);
+    painter.bezierCurveTo(x-2,y+4,x+5,y+12,x+(random()-.5)*13,y+9+random()*25);
+    painter.stroke();
+  }
+  const stoneMap=new THREE.CanvasTexture(surface);stoneMap.colorSpace=THREE.SRGBColorSpace;
+  stoneMap.wrapS=stoneMap.wrapT=THREE.RepeatWrapping;stoneMap.repeat.set(2,3);
+  for(const m of [ivory,cream,aged,shade]){m.map=stoneMap;m.roughness=.94;m.needsUpdate=true;}
   const b=(y,w,h,d,m=ivory)=>box(X,y,Z,w,h,d,m,true);
   const co=(y,rTop,rBottom,h,m=ivory,n=10)=>cylinder(X,y,Z,rTop,rBottom,h,m,n,true);
   const globe=(x,y,z,rx,ry,rz,m=ivory)=>ball(x,y,z,rx,ry,rz,m,true);
@@ -68,6 +87,15 @@ export function makeGuglia({THREE,world,mat,add,box,cylinder,ball,curve,collider
     for(const offset of [-1.32,1.32]){
       flutedColumn(px+(dx?0:offset),8.30,pz+(dz?0:offset),2.51,.14);
     }
+  }
+  // Protruding marble figures and rounded deep niches break up the profile.
+  for(let k=0;k<4;k++){
+    const a=k*Math.PI/2,dx=Math.sin(a),dz=Math.cos(a),x=X+dx*3.1,z=Z+dz*3.1;
+    cylinder(x,7.97,z,.43,.61,1.46,aged,8,true);
+    globe(x,9.55,z,.35,.36,.32,ivory);
+    scroll([[x-.30,8.9,z],[x-.65,8.49,z],[x-.9,8.46,z+.06]],.12,cream);
+    scroll([[x+.3,8.90,z],[x+.70,8.54,z],[x+.80,8.32,z]],.12,cream);
+    globe(x,7.80,z,.65,.17,.52,cream);
   }
   cornice(11.26,6.38,.37);
   b(11.77,5.54,.32,5.54,shade);
