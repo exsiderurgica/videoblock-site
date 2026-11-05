@@ -25,8 +25,8 @@ const goal=new THREE.Group();scene.add(goal);goal.position.set(-1.05,.06,-.7);
 const ring=new THREE.Group();goal.add(ring); // collision target, no uncalibrated floating ring
 const glow=new THREE.PointLight(0xf2c679,1.8,1.8);glow.position.y=.5;goal.add(glow);
 let gotKey=false,door=false;
-const STAGE_W=1050,STAGE_H=590;let projectedX=620;
-camera.aspect=STAGE_W/STAGE_H;camera.fov=40;camera.position.set(0,2.6,7.5);camera.lookAt(0,1.52,.35);camera.updateProjectionMatrix();
+const STAGE_W=1050,STAGE_H=590;let projectedX=675;
+camera.aspect=STAGE_W/STAGE_H;camera.fov=40;camera.position.set(0,2.6,7.5);camera.lookAt(0,1.90,.35);camera.updateProjectionMatrix();
 const masks=[
  {name:'guglia',z:-1.92,polygon:'polygon(37% 19%, 38% 21%, 38.5% 47%, 41% 51%, 42% 70%, 45% 75%, 45% 79%, 31% 79%, 31% 74%, 34% 71%, 35% 53%, 36% 48%)'},
  {name:'lampione',z:-.25,polygon:'polygon(46% 56%, 48.2% 56%, 48.2% 78%, 46.5% 78%)'},
@@ -90,7 +90,7 @@ loader.load('../re1-civilian/assets/civilian_animated.glb',data=>{
 function activate(type){if(activeAction===actions[type])return;const prev=activeAction;activeAction=actions[type];if(prev)prev.fadeOut(.28);activeAction.reset().fadeIn(.28).play();}
 let last=performance.now(),time=0;
 let keys={},joystick={x:0,y:0},stickId=null,stickRadius=52;
-const startX=()=>1.0;
+const startX=()=>1.55;
 let player={x:startX(),z:-.45,dir:Math.PI};
 hero.position.set(player.x,0,player.z);
 // Invisible physical barriers approximate the photographed stonework and bollards.
