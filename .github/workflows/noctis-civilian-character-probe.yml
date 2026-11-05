@@ -1,0 +1,18 @@
+name: NOCTIS - locate civilian animated model
+on:
+  push:
+    branches: [noctis/civilian-character-trial]
+    paths:
+      - '.github/workflows/noctis-civilian-character-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install HTTP client
+        run: python -m pip install requests
+      - name: Identify CC0 model file
+        run: python noctis/re1-prototype/probe_model.py
