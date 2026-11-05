@@ -1,0 +1,852 @@
+{
+  "buildings": [
+    {
+      "id": "way/150562144",
+      "name": "Campanile di Santa Chiara",
+      "area_m2": 170.9,
+      "height_m": 48.0,
+      "height_source": "OSM"
+    },
+    {
+      "id": "way/250141406",
+      "name": "Edificio senza nome",
+      "area_m2": 887.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250141582",
+      "name": "Edificio senza nome",
+      "area_m2": 651.8,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/250141595",
+      "name": "Edificio senza nome",
+      "area_m2": 345.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250141729",
+      "name": "Edificio senza nome",
+      "area_m2": 89.1,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/250141768",
+      "name": "Edificio senza nome",
+      "area_m2": 323.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250141777",
+      "name": "Palazzo Pignatelli di Monteleone",
+      "area_m2": 418.6,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/250141974",
+      "name": "Edificio senza nome",
+      "area_m2": 804.4,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250142157",
+      "name": "Edificio senza nome",
+      "area_m2": 150.9,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/250142276",
+      "name": "Edificio senza nome",
+      "area_m2": 344.4,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250142298",
+      "name": "Edificio senza nome",
+      "area_m2": 263.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250142305",
+      "name": "Edificio senza nome",
+      "area_m2": 339.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/250142471",
+      "name": "Edificio senza nome",
+      "area_m2": 620.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261249895",
+      "name": "Chiesa del Gesù Nuovo",
+      "area_m2": 3632.4,
+      "height_m": 19.5,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261249961",
+      "name": "Edificio senza nome",
+      "area_m2": 260.2,
+      "height_m": 3.1,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/261250167",
+      "name": "Basilica di Santa Chiara",
+      "area_m2": 3231.5,
+      "height_m": 21,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261250353",
+      "name": "Edificio senza nome",
+      "area_m2": 75.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261250926",
+      "name": "Edificio senza nome",
+      "area_m2": 94.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251069",
+      "name": "Edificio senza nome",
+      "area_m2": 80.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251209",
+      "name": "Edificio senza nome",
+      "area_m2": 720.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251213",
+      "name": "Edificio senza nome",
+      "area_m2": 36.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251287",
+      "name": "Edificio senza nome",
+      "area_m2": 306.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251320",
+      "name": "Edificio senza nome",
+      "area_m2": 93.4,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251393",
+      "name": "Edificio senza nome",
+      "area_m2": 463.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251432",
+      "name": "Edificio senza nome",
+      "area_m2": 282.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251442",
+      "name": "Edificio senza nome",
+      "area_m2": 400.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251457",
+      "name": "Edificio senza nome",
+      "area_m2": 474.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261251897",
+      "name": "Edificio senza nome",
+      "area_m2": 100.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261252276",
+      "name": "Edificio senza nome",
+      "area_m2": 188.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261252278",
+      "name": "Edificio senza nome",
+      "area_m2": 365.6,
+      "height_m": 21.7,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/261252588",
+      "name": "Chiesa di Santa Marta",
+      "area_m2": 300.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261252817",
+      "name": "Chiesa San Francesco delle Monache",
+      "area_m2": 387.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261253328",
+      "name": "Palazzo Filomarino",
+      "area_m2": 1551.3,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/261253342",
+      "name": "Palazzo Mazziotti",
+      "area_m2": 436.8,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/261253456",
+      "name": "Palazzo Venezia",
+      "area_m2": 288.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/261253518",
+      "name": "Palazzo Carafa della Spina",
+      "area_m2": 519.0,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/261423568",
+      "name": "Scuola Media Statale Ugo Foscolo",
+      "area_m2": 432.4,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/262931638",
+      "name": "Edificio senza nome",
+      "area_m2": 1414.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262931678",
+      "name": "Edificio senza nome",
+      "area_m2": 547.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262931807",
+      "name": "Palazzo San Marco",
+      "area_m2": 860.5,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/262931817",
+      "name": "Edificio senza nome",
+      "area_m2": 263.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262931819",
+      "name": "Edificio senza nome",
+      "area_m2": 129.9,
+      "height_m": 18.6,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/262931821",
+      "name": "Edificio senza nome",
+      "area_m2": 402.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262932080",
+      "name": "Edificio senza nome",
+      "area_m2": 303.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262932092",
+      "name": "Edificio senza nome",
+      "area_m2": 313.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262932095",
+      "name": "Edificio senza nome",
+      "area_m2": 238.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262932139",
+      "name": "Edificio senza nome",
+      "area_m2": 306.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262932168",
+      "name": "Edificio senza nome",
+      "area_m2": 216.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262941478",
+      "name": "Edificio senza nome",
+      "area_m2": 199.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/262941485",
+      "name": "Edificio senza nome",
+      "area_m2": 117.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263495869",
+      "name": "Edificio senza nome",
+      "area_m2": 187.5,
+      "height_m": 9.3,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/263495905",
+      "name": "Edificio senza nome",
+      "area_m2": 146.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496172",
+      "name": "Edificio senza nome",
+      "area_m2": 65.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496268",
+      "name": "Edificio senza nome",
+      "area_m2": 127.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496469",
+      "name": "Edificio senza nome",
+      "area_m2": 156.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496521",
+      "name": "Edificio senza nome",
+      "area_m2": 184.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496697",
+      "name": "Edificio senza nome",
+      "area_m2": 58.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496784",
+      "name": "Edificio senza nome",
+      "area_m2": 49.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496884",
+      "name": "Edificio senza nome",
+      "area_m2": 31.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496911",
+      "name": "Edificio senza nome",
+      "area_m2": 355.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496952",
+      "name": "Edificio senza nome",
+      "area_m2": 175.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263496991",
+      "name": "Edificio senza nome",
+      "area_m2": 65.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263497368",
+      "name": "Edificio senza nome",
+      "area_m2": 74.8,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/263497404",
+      "name": "Edificio senza nome",
+      "area_m2": 174.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263497410",
+      "name": "Edificio senza nome",
+      "area_m2": 155.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263497436",
+      "name": "Edificio senza nome",
+      "area_m2": 134.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/263497635",
+      "name": "Edificio senza nome",
+      "area_m2": 136.3,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/263497639",
+      "name": "Edificio senza nome",
+      "area_m2": 346.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/266552877",
+      "name": "Edificio senza nome",
+      "area_m2": 164.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/266552917",
+      "name": "Edificio senza nome",
+      "area_m2": 311.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/266553007",
+      "name": "Edificio senza nome",
+      "area_m2": 165.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270212726",
+      "name": "Multicinema Modernissimo",
+      "area_m2": 531.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270217979",
+      "name": "Foro Carolino",
+      "area_m2": 1625.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270220751",
+      "name": "Edificio senza nome",
+      "area_m2": 90.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270228351",
+      "name": "Edificio senza nome",
+      "area_m2": 1137.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270228426",
+      "name": "Edificio senza nome",
+      "area_m2": 733.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270228721",
+      "name": "Convento Professa dei Padri Gesuiti",
+      "area_m2": 541.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270228770",
+      "name": "Edificio senza nome",
+      "area_m2": 220.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270229155",
+      "name": "Edificio senza nome",
+      "area_m2": 185.8,
+      "height_m": 15.5,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/270897925",
+      "name": "Edificio senza nome",
+      "area_m2": 80.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270897926",
+      "name": "Edificio senza nome",
+      "area_m2": 65.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270897956",
+      "name": "Edificio senza nome",
+      "area_m2": 124.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270897970",
+      "name": "Edificio senza nome",
+      "area_m2": 91.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270897988",
+      "name": "Edificio senza nome",
+      "area_m2": 199.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270897992",
+      "name": "Edificio senza nome",
+      "area_m2": 197.2,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270898423",
+      "name": "Edificio senza nome",
+      "area_m2": 866.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270899878",
+      "name": "Edificio senza nome",
+      "area_m2": 51.4,
+      "height_m": 21.7,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/270899994",
+      "name": "Edificio senza nome",
+      "area_m2": 74.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270900004",
+      "name": "Edificio senza nome",
+      "area_m2": 229.7,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270900138",
+      "name": "Edificio senza nome",
+      "area_m2": 353.9,
+      "height_m": 21.7,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/270900420",
+      "name": "Edificio senza nome",
+      "area_m2": 240.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270900449",
+      "name": "Edificio senza nome",
+      "area_m2": 353.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270900450",
+      "name": "Edificio senza nome",
+      "area_m2": 28.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270900555",
+      "name": "Edificio senza nome",
+      "area_m2": 388.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270904518",
+      "name": "Edificio senza nome",
+      "area_m2": 603.2,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/270904939",
+      "name": "Edificio senza nome",
+      "area_m2": 100.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270908670",
+      "name": "Edificio senza nome",
+      "area_m2": 350.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270908820",
+      "name": "Edificio senza nome",
+      "area_m2": 128.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270910698",
+      "name": "Edificio senza nome",
+      "area_m2": 622.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270911693",
+      "name": "Edificio senza nome",
+      "area_m2": 12.4,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270911945",
+      "name": "Edificio senza nome",
+      "area_m2": 135.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270912172",
+      "name": "Edificio senza nome",
+      "area_m2": 141.3,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/270918980",
+      "name": "Edificio senza nome",
+      "area_m2": 206.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271127791",
+      "name": "Edificio senza nome",
+      "area_m2": 159.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271128456",
+      "name": "Edificio senza nome",
+      "area_m2": 122.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271128493",
+      "name": "Edificio senza nome",
+      "area_m2": 190.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271131186",
+      "name": "Edificio senza nome",
+      "area_m2": 188.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271131870",
+      "name": "Edificio senza nome",
+      "area_m2": 4006.9,
+      "height_m": 12.4,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/271133381",
+      "name": "Edificio senza nome",
+      "area_m2": 427.1,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271134367",
+      "name": "Edificio senza nome",
+      "area_m2": 68.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271134696",
+      "name": "Edificio senza nome",
+      "area_m2": 45.1,
+      "height_m": 24.0,
+      "height_source": "OSM"
+    },
+    {
+      "id": "way/271134922",
+      "name": "Edificio senza nome",
+      "area_m2": 276.5,
+      "height_m": 24.0,
+      "height_source": "OSM"
+    },
+    {
+      "id": "way/271136297",
+      "name": "Edificio senza nome",
+      "area_m2": 41.0,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271136355",
+      "name": "Edificio senza nome",
+      "area_m2": 33.4,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/271136464",
+      "name": "Edificio senza nome",
+      "area_m2": 57.9,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/1126502947",
+      "name": "Edificio senza nome",
+      "area_m2": 58.5,
+      "height_m": 18.6,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/1320032382",
+      "name": "Edificio senza nome",
+      "area_m2": 597.2,
+      "height_m": 3.1,
+      "height_source": "levels-estimate"
+    },
+    {
+      "id": "way/1360908120",
+      "name": "Edificio senza nome",
+      "area_m2": 123.6,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/1360908121",
+      "name": "Edificio senza nome",
+      "area_m2": 87.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/1425647393",
+      "name": "Chiesa di Gesù Redentore e San Ludovico d'Angiò",
+      "area_m2": 747.5,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    },
+    {
+      "id": "way/1448690489",
+      "name": "Edificio senza nome",
+      "area_m2": 835.8,
+      "height_m": 13.0,
+      "height_source": "estimated"
+    }
+  ],
+  "note": "OSM plan geometry is real; building heights often assumed. © OpenStreetMap contributors ODbL 1.0."
+}
