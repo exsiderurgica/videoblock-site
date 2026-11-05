@@ -14,7 +14,7 @@ export function makeWorld(scene){
     plasterRed:material(0x996e62),plasterGold:material(0xb8997b),plasterBeige:material(0xb4a28d),
     metal:new THREE.MeshStandardMaterial({color:0x1c2426,metalness:.5,roughness:.55}),
     copper:new THREE.MeshStandardMaterial({color:0x477c74,metalness:.35,roughness:.71}),
-    glass:material(0x191f26,.42),lamp:new THREE.MeshBasicMaterial({color:0xffdca4}),
+    glass:material(0x191f26,.42),shutters:material(0x3b574c),lamp:new THREE.MeshBasicMaterial({color:0xffdca4}),
     roof:material(0x705e50),windowGlow:new THREE.MeshBasicMaterial({color:0xe4ab70})
   };
   const add=(geometry,x,y,z,m,occlude=false,rotation)=>{const v=new THREE.Mesh(geometry,m);v.position.set(x,y,z);if(rotation)v.rotation.set(...rotation);world.add(v);if(occlude)depthMeshes.push(v);return v;};
@@ -23,10 +23,21 @@ export function makeWorld(scene){
   const ball=(x,y,z,rx,ry,rz,m=mat.marble,occ=false)=>{let v=add(new THREE.SphereGeometry(1,10,7),x,y,z,m,occ);v.scale.set(rx,ry,rz);return v;};
   const curve=(points,r,m=mat.marble,occ=false)=>add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points.map(a=>new THREE.Vector3(...a))),Math.max(10,points.length*6),r,7,false),0,0,0,m,occ);
   const light=(x,y,z,power,distance,color)=>{const l=new THREE.PointLight(color,power,distance,2);l.position.set(x,y,z);scene.add(l);return l;};
-  scene.background=new THREE.Color(0x0c1524);
+  // Night sky is an original prerender background texture, not a photo.
+  const sky=document.createElement('canvas');sky.width=1280;sky.height=720;
+  const sk=sky.getContext('2d'),gradient=sk.createLinearGradient(0,0,0,720);
+  gradient.addColorStop(0,'#070e1e');gradient.addColorStop(.53,'#10243e');gradient.addColorStop(1,'#27334b');
+  sk.fillStyle=gradient;sk.fillRect(0,0,1280,720);
+  for(let i=0;i<85;i++){
+    const x=rnd()*1280,y=rnd()*440,alpha=.02+rnd()*.09;
+    const w=35+rnd()*210,h=5+rnd()*28;
+    sk.fillStyle='rgba(151,167,192,'+alpha+')';sk.beginPath();
+    sk.ellipse(x,y,w,h,-.17,0,2*Math.PI);sk.fill();
+  }
+  scene.background=new THREE.CanvasTexture(sky);
   scene.fog=new THREE.Fog(0x121925,65,160);
-  scene.add(new THREE.HemisphereLight(0x9aaed1,0x5f6058,1.35));
-  const moon=new THREE.DirectionalLight(0xc7d3eb,1.25);moon.position.set(-18,34,15);scene.add(moon);
+  scene.add(new THREE.HemisphereLight(0x9aaed1,0x64675d,1.65));
+  const moon=new THREE.DirectionalLight(0xc7d3eb,1.55);moon.position.set(-18,34,15);scene.add(moon);
   const warm=new THREE.DirectionalLight(0xffbd83,.55);warm.position.set(25,22,2);scene.add(warm);
 
   function tileTex(){
@@ -72,6 +83,10 @@ export function makeWorld(scene){
         box(xx,y+.49,z+.60,.07,2.03,.07,mat.metal);
         box(xx-.82,y+.42,z+.53,.16,2.25,.15,mat.pipernoLite);
         box(xx+.82,y+.42,z+.53,.16,2.25,.15,mat.pipernoLite);
+        if((k+Math.round(y))%3===0){
+          box(xx-.51,y+.53,z+.66,.24,1.96,.09,mat.shutters);
+          box(xx+.51,y+.53,z+.66,.24,1.96,.09,mat.shutters);
+        }
         box(xx,y+.22,z+.70,1.85,.13,.73,mat.marble);
         for(let r=0;r<5;r++)box(xx-.7+r*.35,y-.32,z+.94,.045,.62,.05,mat.metal);
         box(xx,y-.37,z+.93,1.75,.08,.07,mat.metal);
@@ -152,8 +167,8 @@ export function makeWorld(scene){
     return lamp;
   }
   lampPost(-27,2);lampPost(34,-4);
-  light(CHX+3.2,9,FRONT+10,44,25,0xffc792);
-  light(-8,10,-7,35,23,0xffd2aa);
+  light(CHX+3.2,9,FRONT+10,72,25,0xffc792);
+  light(-8,10,-7,26,23,0xffd2aa);
   for(const xx of [-24,-17,-1,8,19,29]){
     cylinder(xx,0,13,.23,.3,.85,mat.pipernoLite,9,true);
     cylinder(xx,.84,13,.30,.27,.17,mat.marble,9,true);
