@@ -37,13 +37,13 @@ loader.load('./assets/civilian_animated.glb',data=>{
       let mat=m.clone();
       const label=(n.name+' '+(m.name||'')).toLowerCase();
       let tint=null;
-      if(label.includes('original top')||label.includes('casualsuit')) tint=[.47,.13,.19]; // burgundy hoodie (temporary material, same skinned geometry)
-      else if(label.includes('original bottom')) tint=[.10,.19,.29]; // faded dark blue jeans
+      if(label.includes('original bottom')) tint=[.08,.16,.28]; // denim first: avoid tinting jeans as hoodie
+      else if(label.includes('original top')||label.includes('casualsuit')) tint=[.40,.09,.14]; // burgundy hoodie palette
       else if(label.includes('shoes')||label.includes('ankle lining')) tint=[.24,.20,.16];
       if(tint){
         mat.color.set(0xffffff);
         mat.onBeforeCompile=shader=>{
-          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  diffuseColor.rgb = mix(diffuseColor.rgb, vec3('+tint.join(',')+'), 0.83);');
+          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  diffuseColor.rgb = mix(diffuseColor.rgb, vec3('+tint.join(',')+'), 0.53);');
         };
         mat.customProgramCacheKey=()=> 'noctis-cloth-'+tint.join('-');
       }
@@ -67,11 +67,12 @@ loader.load('./assets/civilian_animated.glb',data=>{
 function activate(type){if(activeAction===actions[type])return;const prev=activeAction;activeAction=actions[type];if(prev)prev.fadeOut(.18);activeAction.reset().fadeIn(.18).play();}
 let last=performance.now(),time=0;
 let keys={},joystick={x:0,y:0},stickId=null,stickRadius=52;
-let player={x:-1.4,z:2.1,dir:Math.PI};
+const startX=()=>window.innerHeight>window.innerWidth?0:-1.15;
+let player={x:startX(),z:2.1,dir:Math.PI};
 hero.position.set(player.x,0,player.z);
 function move(dt){let dx=joystick.x,dy=joystick.y;if(keys.ArrowLeft||keys.a)dx-=1;if(keys.ArrowRight||keys.d)dx+=1;if(keys.ArrowUp||keys.w)dy-=1;if(keys.ArrowDown||keys.s)dy+=1;
   const len=Math.hypot(dx,dy);if(len>1){dx/=len;dy/=len;}if(len>.08){
-    let speed=(sprint||keys.Shift?2.8:1.45);player.x=Math.max(-3,Math.min(3,player.x+dx*dt*speed));player.z=Math.max(-2.7,Math.min(3.3,player.z+dy*dt*speed));
+    let speed=(sprint||keys.Shift?2.8:1.45);const maxX=window.innerHeight>window.innerWidth?1.0:3.0;player.x=Math.max(-maxX,Math.min(maxX,player.x+dx*dt*speed));player.z=Math.max(-2.7,Math.min(3.3,player.z+dy*dt*speed));
     let desired=Math.atan2(dx,dy);let d=(desired-player.dir+Math.PI*3)%(Math.PI*2)-Math.PI;player.dir+=d*Math.min(1,dt*11);
     activate(sprint||keys.Shift?'Run':'Walk');
   }else activate('Idle');
@@ -96,7 +97,7 @@ $('run').addEventListener('pointerdown',e=>{sprint=true;$('run').style.backgroun
 function runUp(){sprint=false;$('run').style.background=''}$('run').addEventListener('pointerup',runUp);$('run').addEventListener('pointercancel',runUp);
 $('use').addEventListener('click',action);
 window.addEventListener('keydown',e=>{keys[e.key.length===1?e.key.toLowerCase():e.key]=true;if(e.key==='e'||e.key===' ')action();if(e.key.startsWith('Arrow'))e.preventDefault();});window.addEventListener('keyup',e=>{keys[e.key.length===1?e.key.toLowerCase():e.key]=false});window.addEventListener('blur',()=>{keys={};joystick={x:0,y:0};sprint=false;knob.style.transform='translate(0,0)'});
-$('restart').addEventListener('click',()=>{player={x:-1.4,z:2.1,dir:Math.PI};gotKey=false;door=false;goal.visible=true;$('task').textContent='Trova la chiave vicino alla guglia';show('SCENA RIPRISTINATA')});
+$('restart').addEventListener('click',()=>{player={x:startX(),z:2.1,dir:Math.PI};gotKey=false;door=false;goal.visible=true;$('task').textContent='Trova la chiave vicino alla guglia';show('SCENA RIPRISTINATA')});
 $('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else game.requestFullscreen?.().catch(()=>{})});
 const audio=$('bgm'); audio.volume=.42;let blobUrl='',audioReady=false,loadAudioPromise=null;
 async function loadAudio(){if(loadAudioPromise)return loadAudioPromise;loadAudioPromise=(async()=>{try{const chunks=await Promise.all(Array.from({length:6},(_,i)=>fetch('../music/p'+i+'.bin').then(r=>{if(!r.ok)throw new Error('Audio HTTP '+r.status);return r.arrayBuffer();})));const track=new Blob(chunks,{type:'audio/ogg'});if(track.size<1500000)throw new Error('Audio incompleto');blobUrl=URL.createObjectURL(track);audio.src=blobUrl;audioReady=true;return true;}catch(e){console.warn('Audio non disponibile',e);return false;}})();return loadAudioPromise;}
