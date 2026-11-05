@@ -17,7 +17,7 @@
 <div id="hud"><div><div id="brand">NOCTIS</div><div id="place">NAPOLI / PIAZZA DEL GESÙ</div></div><div id="mission"><b>01 / LA CHIAVE</b><br><span id="objective">Trova la chiave vicino alla chiesa</span></div></div>
 <div id="feedback"></div>
 <div id="controls"><div id="look" class="touch"></div><div id="lookHelp">TRASCINA PER GUARDARE ↔</div><div id="stick" class="touch"><div id="nub"></div></div><div id="buttons"><button id="run" class="btn touch">CORRI</button><button id="action" class="btn touch">AZIONE</button></div><div id="topRight"><button id="music" class="utility">♫ MUSICA</button><button id="reset" class="utility">↺</button><button id="full" class="utility">⛶</button><button id="loadTrack" class="utility">MP3</button><input id="musicfile" type="file" accept="audio/*"></div><div id="prompt"></div></div>
-<div id="panel"><h1>NOCTIS</h1><div class="sub">NAPOLI / TEST BROWSER 0.6</div><p>Survival horror 3D in terza persona, stile PlayStation 1. Esplora la piazza, recupera la chiave e raggiungi il cancello.</p><p>Il luogo è una prima ricostruzione <b>stilizzata</b>, non ancora la mappa metrica di Napoli.</p><button id="start">INIZIA IL TEST</button><small>Android: joystick a sinistra, trascina a destra per guardare, AZIONE e CORRI.<br>PC: WASD, mouse, E, Shift.<br>Funziona in verticale e orizzontale.</small><div id="error"></div></div>
+<div id="panel"><h1>NOCTIS</h1><div class="sub">NAPOLI / TEST BROWSER 0.6 · AUDIO FIX</div><p>Survival horror 3D in terza persona, stile PlayStation 1. Esplora la piazza, recupera la chiave e raggiungi il cancello.</p><p>Il luogo è una prima ricostruzione <b>stilizzata</b>, non ancora la mappa metrica di Napoli.</p><button id="start">INIZIA IL TEST</button><small>Android: joystick a sinistra, trascina a destra per guardare, AZIONE e CORRI.<br>PC: WASD, mouse, E, Shift.<br>Funziona in verticale e orizzontale. Musica ambientale inclusa e riproducibile in loop.</small><div id="error"></div></div>
 <div id="warning">EXSIDERURGICA / BROWSER-NATIVE / LOW POLY TEST</div>
 <audio id="bgm" loop preload="none"></audio>
 </div>
@@ -90,18 +90,61 @@ $('action').addEventListener('pointerdown',e=>{e.preventDefault();action()});$('
 window.addEventListener('keydown',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(k))e.preventDefault();keys[k]=true;if(k==='e'||k===' ')if(!e.repeat)action()});window.addEventListener('keyup',e=>keys[e.key.length===1?e.key.toLowerCase():e.key]=false);
 // Desktop mouse camera drag, only if event began outside virtual controls.
 let mouseDown=false,px=0;canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){mouseDown=true;px=e.clientX;canvas.setPointerCapture(e.pointerId)}});canvas.addEventListener('pointermove',e=>{if(mouseDown){camera.yaw-=(e.clientX-px)*.006;px=e.clientX}});canvas.addEventListener('pointerup',()=>mouseDown=false);
-const audio=$('bgm');audio.volume=.45;let trackUrl='',audioReady=false;const song='NOTTE AMBIENT ZORLON 01';
-const musicDB=new Promise(resolve=>{try{const req=indexedDB.open('noctis-soundtrack',1);req.onupgradeneeded=()=>req.result.createObjectStore('track');req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null)}catch(e){resolve(null)}});
+const audio=$('bgm'); audio.volume=.45;
+let trackUrl='', audioReady=false, manualTrack=false, musicLoading=false;
 function audioMessage(t){notice(t,3)}
-function setTrack(blob){if(trackUrl)URL.revokeObjectURL(trackUrl);trackUrl=URL.createObjectURL(blob);audio.src=trackUrl;audio.load();audioReady=true;$('music').textContent='♫ MUSICA'}
-async function restoreTrack(){const db=await musicDB;if(!db)return;const tr=db.transaction('track','readonly').objectStore('track').get('audio');tr.onsuccess=()=>{if(tr.result)setTrack(tr.result)}}
-async function saveTrack(blob){const db=await musicDB;if(!db)return;try{db.transaction('track','readwrite').objectStore('track').put(blob,'audio')}catch(e){}}
-function playAudio(){if(!audioReady){audioMessage('SCEGLI MP3 DAL TELEFONO (UNA SOLA VOLTA)');$('musicfile').click();return}audio.play().then(()=>{$('music').textContent='Ⅱ MUSICA'}).catch(()=>audioMessage('TOCCA MUSICA PER ATTIVARE AUDIO'))}
-restoreTrack();$('music').textContent='♫ CARICA MP3';
-$('start').addEventListener('click',()=>{panel.style.display='none';playing=true;last=performance.now();playAudio()});
-$('music').addEventListener('click',()=>{if(audio.paused)playAudio();else{audio.pause();$('music').textContent='♫ MUSICA'}});
+function setTrack(blob){
+  if(trackUrl)URL.revokeObjectURL(trackUrl);
+  trackUrl=URL.createObjectURL(blob);
+  audio.src=trackUrl;audio.load();audioReady=true;
+  $('music').textContent='♫ MUSICA';
+}
+async function loadSiteTrack(){
+  if(musicLoading)return;
+  musicLoading=true;$('music').textContent='♫ CARICAMENTO';
+  try{
+    const parts=await Promise.all(Array.from({length:6},(_,i)=>
+      fetch('./music/p'+i+'.bin?v=20261105').then(r=>{
+        if(!r.ok)throw Error('Audio '+i+' HTTP '+r.status);
+        return r.arrayBuffer();
+      })
+    ));
+    const track=new Blob(parts,{type:'audio/ogg'});
+    if(track.size!==1523969)throw Error('Audio incompleto ('+track.size+' byte)');
+    if(!manualTrack)setTrack(track);
+    return true;
+  }catch(e){
+    $('music').textContent='♫ AUDIO NON DISP.';
+    audioMessage('AUDIO: '+String(e.message||e).slice(0,60));
+    return false;
+  }
+}
+const siteTrackReady=loadSiteTrack();
+function playAudio(){
+  if(!audioReady){
+    audioMessage('CARICAMENTO COLONNA SONORA...');
+    siteTrackReady.then(ok=>{if(ok&&playing&&audio.paused&&audioReady){
+      audio.play().then(()=>$('music').textContent='Ⅱ MUSICA')
+        .catch(()=>audioMessage('TOCCA ♫ MUSICA PER ATTIVARE AUDIO'));
+    }});
+    return;
+  }
+  audio.play().then(()=>$('music').textContent='Ⅱ MUSICA')
+    .catch(()=>audioMessage('TOCCA ♫ MUSICA PER ATTIVARE AUDIO'));
+}
+$('start').addEventListener('click',()=>{
+  panel.style.display='none';playing=true;last=performance.now();playAudio();
+});
+$('music').addEventListener('click',()=>{
+  if(audio.paused)playAudio();else{audio.pause();$('music').textContent='♫ MUSICA'}
+});
 $('loadTrack').addEventListener('click',()=>$('musicfile').click());
-$('musicfile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;setTrack(f);saveTrack(f);playAudio();audioMessage('BRANO MEMORIZZATO PER LE PROSSIME PARTITE')});
+$('musicfile').addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  manualTrack=true;setTrack(f);playAudio();audioMessage('MP3 PERSONALE CARICATO');
+});
+audio.addEventListener('ended',()=>{$('music').textContent='♫ MUSICA'});
+window.addEventListener('pagehide',()=>{if(trackUrl)URL.revokeObjectURL(trackUrl)});
 $('reset').addEventListener('click',()=>{player.x=7.5;player.z=13.5;player.yaw=0;camera.yaw=0;camera.pitch=.08;notice('POSIZIONE RIPRISTINATA',1.5)});
 $('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else $('app').requestFullscreen?.().catch(()=>{})});
 window.addEventListener('blur',()=>{moveStick={x:0,y:0};runTouch=false;for(let k in keys)delete keys[k]});
