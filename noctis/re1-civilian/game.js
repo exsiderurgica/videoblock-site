@@ -12,9 +12,9 @@ renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.shadowMap.enabled=false;
 renderer.domElement.style.zIndex='0';
 game.insertBefore(renderer.domElement,game.firstChild);
-scene.add(new THREE.HemisphereLight(0x8398c9,0xb7a080,2.6));
-const keyLight=new THREE.DirectionalLight(0xffd3a1,2.1); keyLight.position.set(-2,6,5);scene.add(keyLight);
-const bounce=new THREE.DirectionalLight(0xa3b6de,.7);bounce.position.set(4,5,-5);scene.add(bounce);
+scene.add(new THREE.HemisphereLight(0x8398c9,0xb7a080,1.45));
+const keyLight=new THREE.DirectionalLight(0xffd3a1,1.5); keyLight.position.set(-2,6,5);scene.add(keyLight);
+const bounce=new THREE.DirectionalLight(0xa3b6de,.45);bounce.position.set(4,5,-5);scene.add(bounce);
 const hero=new THREE.Group();scene.add(hero);
 let mixer=null, actions={},activeAction=null,modelReady=false;
 const silhouetteShadow=new THREE.Mesh(new THREE.CircleGeometry(.5,20),new THREE.MeshBasicMaterial({color:0x060506,transparent:true,opacity:.42,depthWrite:false}));silhouetteShadow.rotation.x=-Math.PI/2;silhouetteShadow.position.y=.02;hero.add(silhouetteShadow);
@@ -22,7 +22,7 @@ const goal=new THREE.Group();scene.add(goal);goal.position.set(.7,.05,-2.15);
 const ring=new THREE.Group();goal.add(ring); // collision target, no uncalibrated floating ring
 const glow=new THREE.PointLight(0xf2c679,1.8,1.8);glow.position.y=.5;goal.add(glow);
 let gotKey=false,door=false;
-function resize(){let w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const portrait=h>w;camera.fov=portrait?47:40;camera.position.set(0,portrait?2.65:2.5,portrait?9.6:7.5);camera.lookAt(0,portrait?1.15:1.1,.35);camera.updateProjectionMatrix();}
+function resize(){let w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const portrait=h>w;camera.fov=portrait?47:40;camera.position.set(0,portrait?2.65:2.5,portrait?9.6:7.5);camera.lookAt(0,portrait?1.78:1.50,.35);camera.updateProjectionMatrix();}
 window.addEventListener('resize',resize);window.addEventListener('orientationchange',resize);resize();
 const loader=new GLTFLoader();
 loader.load('./assets/civilian_animated.glb',data=>{
@@ -37,13 +37,13 @@ loader.load('./assets/civilian_animated.glb',data=>{
       let mat=m.clone();
       const label=(n.name+' '+(m.name||'')).toLowerCase();
       let tint=null;
-      if(label.includes('original bottom')) tint=[.08,.16,.28]; // denim first: avoid tinting jeans as hoodie
-      else if(label.includes('original top')||label.includes('casualsuit')) tint=[.40,.09,.14]; // burgundy hoodie palette
-      else if(label.includes('shoes')||label.includes('ankle lining')) tint=[.24,.20,.16];
+      if(label.includes('original bottom')) tint=[.14,.23,.36]; // denim: retain texture details; do not tint as hoodie
+      else if(label.includes('original top')||label.includes('casualsuit')) tint=[.25,.045,.065]; // darker burgundy; source mesh is a sweater, not yet a hoodie
+      else if(label.includes('shoes')||label.includes('ankle lining')) tint=[.34,.27,.21];
       if(tint){
         mat.color.set(0xffffff);
         mat.onBeforeCompile=shader=>{
-          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  diffuseColor.rgb = mix(diffuseColor.rgb, vec3('+tint.join(',')+'), 0.53);');
+          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n  diffuseColor.rgb *= vec3('+tint.join(',')+');');
         };
         mat.customProgramCacheKey=()=> 'noctis-cloth-'+tint.join('-');
       }
