@@ -24,7 +24,7 @@ const actorRoot=new THREE.Group();scene.add(actorRoot);
 actorRoot.visible=false;
 const debug=new URLSearchParams(location.search).has('debug');
 const show=(m)=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(show.timer);show.timer=setTimeout(()=>t.classList.remove('on'),2200)};
-let player={x:3.4,z:19.8,yaw:Math.PI},hasKey=false,finished=false;
+let player={x:-3.5,z:20.5,yaw:Math.PI},hasKey=false,finished=false;
 actorRoot.position.set(player.x,0,player.z);actorRoot.rotation.y=player.yaw;
 
 // Ground contact shadow: projected on common world plane.
@@ -216,7 +216,7 @@ window.addEventListener('keydown',e=>{
 });
 window.addEventListener('keyup',e=>keys[e.key.length===1?e.key.toLowerCase():e.key]=false);
 window.addEventListener('blur',()=>{keys={};stick={x:0,y:0};sprint=false;knob.style.transform='translate(0,0)'});
-$('reset').addEventListener('click',()=>{player={x:3.4,z:19.8,yaw:Math.PI};hasKey=false;finished=false;$('task').textContent='Raggiungi la base della guglia';show('CAMERA RIPRISTINATA')});
+$('reset').addEventListener('click',()=>{player={x:-3.5,z:20.5,yaw:Math.PI};hasKey=false;finished=false;$('task').textContent='Raggiungi la base della guglia';show('CAMERA RIPRISTINATA')});
 $('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else game.requestFullscreen?.().catch(()=>{})});
 const audio=$('bgm');audio.volume=.38;let audioBlob='',audioLoaded=false,audioPromise=null;
 async function loadSound(){
@@ -237,9 +237,12 @@ start.addEventListener('click',()=>{
  if(!modelReady||!bakedReady)return;playing=true;$('intro').style.display='none';loadSound().then(ok=>{if(ok&&playing)playSound()});
 });
 window.addEventListener('pagehide',()=>{audio.pause();if(audioBlob)URL.revokeObjectURL(audioBlob)});
+if(debug)window.__noctisDebugSetPlayer=(x,z,yaw=Math.PI)=>{
+ player.x=x;player.z=z;player.yaw=yaw;update(0);return {x,z,activeMasks:maskInstances.filter(m=>m.visible).length};
+};
 window.__noctisProbe=()=>({
  modelReady,bakedReady,playing,maskCount:maskInstances.length,backgroundReady:!!background.naturalWidth,
  monument:guglia,feet:projectFoot(),player:{...player},groundBlocked:blocked(guglia.x,guglia.z),
- canMove:!blocked(3.4,18),worldIsHidden:!world.visible,
- rect:stage.getBoundingClientRect().toJSON()
+ canMove:!blocked(-3.5,19),worldIsHidden:!world.visible,
+ activeMasks:maskInstances.filter(m=>m.visible).length,rect:stage.getBoundingClientRect().toJSON()
 });
