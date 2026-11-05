@@ -123,7 +123,7 @@ function move(dt){
 window.__noctisProbe=()=>({ready:modelReady,playing:started,feet:footPixel(),player:{...player},collisions:blocked(-1.85,-2.05),occlusion:masks.map(m=>({name:m.name,visible:m.el.style.display==='block'}))});
 function show(msg){const e=$('toast');e.textContent=msg;e.classList.add('on');clearTimeout(show._t);show._t=setTimeout(()=>e.classList.remove('on'),2300);}
 function action(){if(!started||!modelReady)return;
-  if(!gotKey&&Math.hypot(player.x-goal.position.x,player.z-goal.position.z)<1.05{gotKey=true;goal.visible=false;$('task').textContent='Raggiungi il portone della chiesa';show('HAI TROVATO LA CHIAVE');return;}
+  if(!gotKey&&Math.hypot(player.x-goal.position.x,player.z-goal.position.z)<1.05){gotKey=true;goal.visible=false;$('task').textContent='Raggiungi il portone della chiesa';show('HAI TROVATO LA CHIAVE');return;}
   if(gotKey&&player.x>2.5&&player.z<-.6){door=true;show('PORTONE APERTO · FINE DEL TEST');$('task').textContent='Test completato — Piazza del Gesù';return;}
   show(gotKey?'Avvicinati al portone a destra':'Cerca la chiave oltre la guglia');
 }
