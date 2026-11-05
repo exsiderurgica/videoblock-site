@@ -26,6 +26,28 @@ jobs:
         run: |
           python -m http.server 8123 --bind 127.0.0.1 > /tmp/noctis-server.log 2>&1 &
           python noctis/re1-camera01/tests/headless_smoke.py
+      - name: Pubblica anteprima compatta nel log per revisione visiva
+        if: always()
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          import base64, io
+          from PIL import Image
+          from pathlib import Path
+          directory=Path("noctis/re1-camera01/test-renders")
+          for name in ["desktop-inizio", "desktop-movimento", "android-inizio", "android-movimento"]:
+              path=directory/(name+".png")
+              if not path.exists():
+                  print("SCREENSHOT_MISSING",name)
+                  continue
+              img=Image.open(path).convert("RGB")
+              img.thumbnail((760,760))
+              buf=io.BytesIO()
+              img.save(buf,format="JPEG",quality=58,optimize=True)
+              print("BEGIN_NOCTIS_IMAGE:"+name)
+              print(base64.b64encode(buf.getvalue()).decode("ascii"))
+              print("END_NOCTIS_IMAGE:"+name)
+          PY
       - name: Salva screenshot autentici e diagnostica
         if: always()
         uses: actions/upload-artifact@v4
