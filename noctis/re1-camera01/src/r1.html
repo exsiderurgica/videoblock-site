@@ -1,0 +1,66 @@
+<meta charset="utf-8">
+<title>NOCTIS Camera 01</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: stage 982x941 (rapporto dell'immagine) centrata e scalata; sotto: sfondo, personaggio 3D, maschere di occlusione; sopra: effetti e controlli. Look unico scuro per scelta. */
+:root{--bg:#030406;--fg:#e8dcc4;--dim:#a89c86;--accent:#d9a45b;--line:#6b5d48;--panel:#0a0d14f0;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;--disp:'Cormorant SC','Times New Roman',serif;color-scheme:dark}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);overflow:hidden;font-family:var(--mono)}
+body{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+#game{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);touch-action:none}
+#frame{position:relative;width:min(100vw,calc(100vh*982/941));aspect-ratio:982/941;max-height:100vh;overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;width:982px;height:941px;transform-origin:0 0}
+#stage>*{position:absolute;left:0;top:0}
+#bg,#gl,#dbg{width:982px;height:941px;display:block}
+.mask{pointer-events:none}
+#gl{pointer-events:none}
+#fx{inset:0;width:982px;height:941px;pointer-events:none}
+.glow{pointer-events:none;mix-blend-mode:screen;border-radius:50%;background:radial-gradient(circle,rgba(255,170,80,.55),rgba(255,140,60,0) 68%);animation:fl 3.1s infinite steps(1)}
+@keyframes fl{0%{opacity:.9}7%{opacity:.55}11%{opacity:1}30%{opacity:.8}33%{opacity:.5}36%{opacity:.95}70%{opacity:.85}}
+.fog{width:1964px;height:941px;opacity:.055;mix-blend-mode:screen;pointer-events:none;background-size:982px 941px;animation:fg 70s linear infinite}
+#fog2{animation-duration:110s;animation-direction:reverse;opacity:.04;top:60px}
+@keyframes fg{from{transform:translateX(0)}to{transform:translateX(-982px)}}
+#grain{left:-300px;top:-300px;width:1582px;height:1541px;opacity:.13;mix-blend-mode:overlay;pointer-events:none;animation:gr .5s steps(5) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-60px,30px)}50%{transform:translate(40px,-50px)}75%{transform:translate(-30px,-20px)}100%{transform:translate(0,0)}}
+#vig{width:982px;height:941px;pointer-events:none;background:radial-gradient(ellipse at 45% 50%,transparent 40%,rgba(0,0,0,.7) 100%)}
+@media(prefers-reduced-motion:reduce){.glow,.fog,#grain{animation:none}}
+#ui{position:fixed;inset:0;pointer-events:none}
+#hud{position:absolute;left:max(14px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 10px);right:14px;display:flex;justify-content:space-between;gap:12px;text-shadow:0 2px 6px #000;font-size:11px;letter-spacing:.12em}
+#hud b{font-family:var(--disp);font-size:24px;letter-spacing:.3em;display:block}
+#task{text-align:right;color:var(--accent);max-width:48%;line-height:1.5}
+#toast{position:absolute;left:50%;bottom:34%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:.7em 1em;font-size:12px;max-width:80%;text-align:center;opacity:0;transition:opacity .25s;line-height:1.5}
+#toast.on{opacity:1}
+#stick{position:absolute;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);width:min(120px,26vmin);aspect-ratio:1;border-radius:50%;border:1px solid #d8cba88a;background:#070b14a0;touch-action:none;pointer-events:auto}
+#knob{position:absolute;left:50%;top:50%;width:38%;aspect-ratio:1;margin:-19% 0 0 -19%;border-radius:50%;border:1px solid #e6dac0;background:#bcb094a6;pointer-events:none}
+#btns{position:absolute;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;gap:10px;align-items:flex-end;pointer-events:auto}
+#btns button{font:inherit;color:var(--fg);background:#090c12c7;border:1px solid #ddc9a5a6;border-radius:50%;width:min(66px,15vmin);aspect-ratio:1;font-size:10px;letter-spacing:.08em;touch-action:none}
+#btns #use{width:min(82px,19vmin)}#btns button:active,#btns button.on{background:#b29669;color:#060708}
+#tools{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 56px);display:flex;gap:6px;pointer-events:auto}
+#tools button{font:inherit;font-size:10px;color:var(--fg);background:#07090dcf;border:1px solid var(--line);padding:.6em .8em;border-radius:3px}
+#intro{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#030407ea;padding:16px}
+#panel{width:min(460px,94%);border:1px solid var(--line);background:var(--panel);padding:24px;text-align:center;max-height:94%;overflow:auto}
+#panel h1{font-family:var(--disp);font-size:40px;letter-spacing:.32em;margin:0 0 .3em}
+#panel p,#panel small{font-size:12px;line-height:1.6;color:var(--dim);margin:.4em 0;display:block}
+#start{font:inherit;width:100%;padding:.9em;margin:.8em 0;border:0;background:var(--accent);color:#0b0d11;font-weight:700;letter-spacing:.2em}
+#start:disabled{opacity:.5}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<div id="game"><div id="frame"><div id="stage">
+<canvas id="bg" width="982" height="941"></canvas>
+<canvas id="gl"></canvas>
+<div id="masks"></div>
+<div class="fog" id="fog1"></div><div class="fog" id="fog2"></div>
+<div id="glows"></div>
+<div id="vig"></div><div id="grain"></div>
+<canvas id="dbg" width="982" height="941" hidden></canvas>
+</div></div></div>
+<div id="ui">
+<div id="hud"><div><b>NOCTIS</b>NAPOLI · PIAZZA DEL GESÙ NUOVO</div><div id="task">Raggiungi la guglia</div></div>
+<div id="tools"><button id="aud">♪ AUDIO</button><button id="reset">↺ RIPARTI</button><button id="dbgb">DEBUG</button></div>
+<div id="toast"></div>
+<div id="stick"><div id="knob"></div></div>
+<div id="btns"><button id="run">CORRI</button><button id="use">AZIONE</button></div>
+</div>
+<div id="intro"><div id="panel"><h1>NOCTIS</h1>
+<p>Camera 01 · sfondo di prova dal tuo render. Il personaggio è 3D in tempo reale sulla stessa prospettiva, con collisioni e occlusioni (paletti, guglia).</p>
+<button id="start" disabled>CARICAMENTO…</button>
+<small>PC: W/S avanti·indietro, A/D ruota, SHIFT corri, E azione. Touch: joystick (su/giù cammina, lati ruota), CORRI, AZIONE.<br>DEBUG mostra area calpestabile e ostacoli.</small></div></div>

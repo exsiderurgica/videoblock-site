@@ -1,0 +1,54 @@
+<!doctype html><html><body style="margin:0;background:transparent"><canvas id="c"></canvas>
+<script src="three.min.js"></script><script>
+const IW=982,IH=941,SS=2,CAL={f:900,cx:395,cy:418,ch:3.26};
+const R=new THREE.WebGLRenderer({canvas:document.getElementById('c'),alpha:true,antialias:true,preserveDrawingBuffer:true});
+R.setSize(IW*SS,IH*SS,false);R.setClearColor(0,0);R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=0.85;
+const cam=new THREE.PerspectiveCamera();cam.position.set(0,CAL.ch,0);cam.updateMatrixWorld();
+{const n=.3,fa=400,W=IW,H=IH,P=new THREE.Matrix4().set(2*CAL.f/W,0,1-2*CAL.cx/W,0, 0,2*CAL.f/H,2*CAL.cy/H-1,0, 0,0,-(fa+n)/(fa-n),-2*fa*n/(fa-n), 0,0,-1,0);cam.projectionMatrix.copy(P);cam.projectionMatrixInverse.copy(P).invert()}
+const S=new THREE.Scene();S.fog=new THREE.FogExp2(0x1d2226,.016);
+let seed=7;const rnd=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+const tc=document.createElement('canvas');tc.width=tc.height=256;{const c=tc.getContext('2d');c.fillStyle='#6b665d';c.fillRect(0,0,256,256);
+ for(let i=0;i<5000;i++){const g=rnd();c.fillStyle=`rgba(${g>.55?'170,160,145':'14,13,11'},${rnd()*.22})`;const s=1+rnd()*6;c.fillRect(rnd()*256,rnd()*256,s,s*(.6+rnd()))}
+ for(let i=0;i<60;i++){c.fillStyle=`rgba(10,10,9,${rnd()*.25})`;c.beginPath();c.ellipse(rnd()*256,rnd()*256,4+rnd()*20,6+rnd()*30,0,0,7);c.fill()}}
+const T=new THREE.CanvasTexture(tc);T.wrapS=T.wrapT=THREE.RepeatWrapping;T.encoding=THREE.sRGBEncoding;
+T.repeat.set(2,2);const M=new THREE.MeshStandardMaterial({map:T,color:0x9a948a,roughness:.92});
+const G=new THREE.MeshStandardMaterial({color:0xb08a46,roughness:.45,metalness:.7});
+const X=-8.44,Z=-32.06,Y0=4.55,g=new THREE.Group();g.position.set(X,0,Z);g.rotation.y=.12;S.add(g);
+const add=(geo,m,x,y,z,r)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);if(r)o.rotation.set(...r);g.add(o);return o};
+const box=(w,h,d,y,m=M,x=0,z=0)=>add(new THREE.BoxGeometry(w,h,d),m,x,y+h/2,z);
+// secondo ordine (altezze compresse: la guglia deve stare nell'inquadratura)
+const H2=1.70,H3=1.45,HS=7.6;
+box(1.95,.26,1.95,Y0);box(1.62,H2-.52,1.62,Y0+.26);box(1.98,.26,1.98,Y0+H2-.26);
+for(const [dx,dz] of [[1,1],[1,-1],[-1,1],[-1,-1]]){
+  const st=new THREE.Group();st.position.set(dx*.86,Y0+H2,dz*.86);g.add(st);
+  const a1=new THREE.Mesh(new THREE.CylinderGeometry(.11,.17,.62,8),M);a1.position.y=.31;st.add(a1);
+  const h1=new THREE.Mesh(new THREE.SphereGeometry(.10,8,6),M);h1.position.y=.72;st.add(h1);
+  const pts=[];for(let i=0;i<=10;i++){const t=i/10;pts.push(new THREE.Vector3(dx*(.88-.5*t),Y0+H2-.05+t*1.1+Math.sin(t*Math.PI)*.18,dz*(.88-.5*t)))}
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),14,.08,6),M))}
+for(let k=0;k<4;k++){const r=k*Math.PI/2;add(new THREE.BoxGeometry(.92,H2*.55,.07),M,Math.sin(r)*.84,Y0+H2*.52,Math.cos(r)*.84,[0,r,0]);
+  add(new THREE.SphereGeometry(.18,10,8),M,Math.sin(r)*.9,Y0+H2*.55,Math.cos(r)*.9)}
+// terzo ordine
+const Y1=Y0+H2;box(1.16,H3-.22,1.16,Y1);box(1.38,.22,1.38,Y1+H3-.22);
+for(let k=0;k<4;k++){const r=k*Math.PI/2;add(new THREE.TorusGeometry(.34,.05,6,14,Math.PI),M,Math.sin(r)*.62,Y1+H3*.72,Math.cos(r)*.62,[Math.PI,r,0]);
+  add(new THREE.SphereGeometry(.13,8,6),M,Math.sin(r)*.64,Y1+H3*.35,Math.cos(r)*.64)}
+// fusto affusolato
+const Y2=Y1+H3;const sh=new THREE.CylinderGeometry(.26,.74,HS,4,8);sh.rotateY(Math.PI/4);add(sh,M,0,Y2+HS/2,0);
+for(let i=0;i<5;i++){const y=Y2+0.9+i*(HS-1.6)/4,w=1.02-i*.14;box(w*1.05,.12,w*1.05,y);
+  for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]])add(new THREE.SphereGeometry(1,8,6),M,dx*w*.46,y+(HS-1.6)/8,dz*w*.46).scale.set(.09,.30,.09)}
+for(const [sx,sz] of [[-1,-1],[1,-1],[-1,1],[1,1]]){const pts=[];for(let i=0;i<=24;i++){const a1=i/24,r=(0.74-.48*a1)*.7071+.05+Math.sin(a1*14)*.04;pts.push(new THREE.Vector3(sx*r,Y2+.15+a1*(HS-.5),sz*r))}
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),60,.055,5),M))}
+// coronamento e Madonna
+const Y3=Y2+HS;box(.62,.2,.62,Y3);add(new THREE.CylinderGeometry(.13,.26,.4,8),M,0,Y3+.4,0);add(new THREE.SphereGeometry(.24,12,9),G,0,Y3+.78,0);
+const mad=new THREE.Group();mad.position.set(0,Y3+.95,0);g.add(mad);
+{const r=new THREE.Mesh(new THREE.ConeGeometry(.28,.95,10),G);r.position.y=.48;mad.add(r);const h=new THREE.Mesh(new THREE.SphereGeometry(.11,10,8),G);h.position.y=1.04;mad.add(h);
+ const ar=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.46,6),G);ar.position.y=.75;ar.rotation.z=1.35;mad.add(ar);
+ for(let i=0;i<10;i++){const a1=i/10*Math.PI*2;const st=new THREE.Mesh(new THREE.OctahedronGeometry(.035),G);st.position.set(Math.cos(a1)*.19,1.2+Math.sin(a1)*.03,Math.sin(a1)*.19);mad.add(st)}}
+// luci: luna dietro a sinistra (alone in alto a sinistra), luce calda dal basso dei lampioni, cielo freddo
+S.add(new THREE.HemisphereLight(0x3d4a5a,0x15120f,.32));
+const moon=new THREE.DirectionalLight(0x9fb3cc,.75);moon.position.set(-40,35,-90);S.add(moon);moon.target.position.set(X,10,Z);S.add(moon.target);
+const warm=new THREE.PointLight(0xe8a070,4,16,2);warm.position.set(X+2.6,2.2,Z+4.5);S.add(warm);
+const warm2=new THREE.PointLight(0xe8a070,2.2,14,2);warm2.position.set(X-3,2,Z+3);S.add(warm2);
+const fillF=new THREE.DirectionalLight(0x6b7686,.16);fillF.position.set(2,6,10);S.add(fillF);
+R.render(S,cam);window.__done=true;
+// anche il profilo (silhouette) per la maschera
+</script></body></html>
