@@ -4,6 +4,7 @@ on:
     branches: [noctis/civilian-character-trial]
     paths:
       - '.github/workflows/noctis-civilian-render-check.yml'
+      - 'noctis/re1-civilian/game.js'
   workflow_dispatch:
 permissions:
   contents: read
