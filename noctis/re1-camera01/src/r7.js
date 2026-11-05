@@ -7,6 +7,10 @@ function buildZombie(done){
   fetch('zombie.txt').then(r=>{if(!r.ok)throw Error('zombie.txt: HTTP '+r.status);return r.text()}).then(t=>{const bin=Uint8Array.from(atob(t),c=>c.charCodeAt(0));
     new THREE.GLTFLoader().parse(bin.buffer,'',gl=>{
       const root=new THREE.Group();scene.add(root);ZOM.root=root;
+      // Ombra di contatto che segue i piedi di Pulcinella (stessa luce del protagonista).
+      const contact=new THREE.Mesh(new THREE.PlaneGeometry(1.05,.78),actor.blob.material);
+      contact.rotation.x=-Math.PI/2;contact.position.y=.018;
+      root.add(contact);
       const m=gl.scene,grp=new THREE.Group();grp.add(m);grp.rotation.y=Math.PI;root.add(grp);
       m.traverse(o=>{if(o.isMesh){o.frustumCulled=false;const mt=o.material;mt.metalness=0;mt.roughness=.95;if(mt.map)mt.map.anisotropy=4}});
       const bn={};m.traverse(o=>{if(o.isBone)bn[o.name]=o});

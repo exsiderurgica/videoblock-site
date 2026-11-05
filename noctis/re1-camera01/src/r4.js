@@ -45,8 +45,28 @@ function update(dt){
   actor.root.position.set(actor.x,0,actor.z);actor.root.rotation.y=-actor.yaw;
   if(inp.use){inp.use=false;useSpot()}
 }
-let maskEls=[];
-function render(){const v=g2img(actor.x,actor.z)[1],vz=ZOM.root?g2img(ZOM.x,ZOM.z)[1]:1e9;const vm=Math.min(v,vz);maskEls.forEach((m,i)=>{m.style.display=vm<MASKS[i].base-1?'block':'none'});R.render(scene,cam)}
+/* Occlusori 3D nella stessa proiezione del render fotografico.
+   Invece di coprire indiscriminatamente tutto il canvas WebGL in base alla posizione
+   di un solo personaggio, ogni superficie scrive nel depth buffer: protagonista e
+   Pulcinella possono passare davanti/dietro alla stessa guglia o agli stessi paletti. */
+const foregroundMeshes=[];
+function foregroundFromMask(c,x0,y0,base){
+  // La profondita' della superficie coincide con quella della sua base a terra.
+  const depth=CAL.f*CAL.ch/(base-CAL.cy);
+  const px=depth/CAL.f;
+  const tex=new THREE.CanvasTexture(c);
+  tex.encoding=THREE.sRGBEncoding;
+  tex.magFilter=THREE.LinearFilter;
+  tex.minFilter=THREE.LinearFilter;
+  const mat=new THREE.MeshBasicMaterial({map:tex,alphaTest:.06,transparent:false,
+    depthTest:true,depthWrite:true,side:THREE.DoubleSide,fog:false,toneMapped:false});
+  const plane=new THREE.Mesh(new THREE.PlaneGeometry(c.width*px,c.height*px),mat);
+  plane.position.set((x0+c.width/2-CAL.cx)*px,
+    CAL.ch+(CAL.cy-y0-c.height/2)*px,-depth);
+  plane.frustumCulled=false;
+  scene.add(plane);foregroundMeshes.push(plane);
+}
+function render(){R.render(scene,cam)}
 function drawDebug(){const c=$('dbg').getContext('2d');c.clearRect(0,0,IW,IH);
   const poly=(P,col)=>{c.strokeStyle=col;c.lineWidth=2;c.beginPath();P.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();c.stroke()};
   poly(WALK_IMG,'#3f3');poly(GUG_BASE,'#f44');poly(GUG_MASK,'#48f');MASKS.slice(1).forEach(m=>poly(m.poly,'#48f'));
@@ -82,7 +102,7 @@ function boot(){
     $('bg').getContext('2d').drawImage(img,0,0);
     MASKS.forEach(m=>{const xs=m.poly.map(p=>p[0]),ys=m.poly.map(p=>p[1]),x0=Math.floor(Math.min(...xs))-2,y0=Math.floor(Math.min(...ys))-2,x1=Math.ceil(Math.max(...xs))+2,y1=Math.ceil(Math.max(...ys))+2;
       const c=cvs(x1-x0,y1-y0,(g)=>{g.beginPath();m.poly.forEach((p,i)=>i?g.lineTo(p[0]-x0,p[1]-y0):g.moveTo(p[0]-x0,p[1]-y0));g.closePath();g.clip();g.drawImage(img,-x0,-y0)});
-      c.className='mask';c.style.cssText='position:absolute;left:'+x0+'px;top:'+y0+'px;display:none';$('masks').appendChild(c);maskEls.push(c)});
+      foregroundFromMask(c,x0,y0,m.base)});
     assetStatus('bg',true);render()};
   img.onerror=()=>assetStatus('bg',false);img.src='bg.jpg';
   $('start').addEventListener('click',()=>{if($('start').disabled)return;$('intro').style.display='none';running=true;last=performance.now();audioStart();say('Qualcosa si muove nella piazza.',3400)});
@@ -91,7 +111,7 @@ function boot(){
   $('aud').addEventListener('click',()=>{const on=audioToggle();$('aud').textContent=on?'♪ AUDIO':'♪ MUTO'});$('dbgb').addEventListener('click',()=>{dbgOn=!dbgOn;$('dbg').hidden=!dbgOn;if(dbgOn)drawDebug()});
   (function loop(now){requestAnimationFrame(loop);if(!running)return;const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);render();pan();if(dbgOn)drawDebug()})(performance.now());
 }
-window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),masksShown:maskEls.filter(m=>m.style.display==='block').length}),
+window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),depthOccluders:foregroundMeshes.length}),
   setImg:(u,v,yaw=actor.yaw)=>{const g=img2g(u,v);actor.x=g[0];actor.z=g[1];actor.yaw=yaw;actor.speed=0;resolve({x:actor.x,z:actor.z});update(.016);render();return window.__noctis.probe()},
   step:(n,f,t,run)=>{for(let i=0;i<n;i++){inp.keys={KeyW:f>0,KeyS:f<0,KeyA:t<0,KeyD:t>0,ShiftLeft:!!run};update(1/60)}inp.keys={};render();return window.__noctis.probe()},
   use:()=>{inp.use=true;update(.016)},start:()=>{if($('start').disabled)return false;$('intro').style.display='none';running=true;last=performance.now()},debug:(on)=>{dbgOn=on;$('dbg').hidden=!on;if(on)drawDebug()}};
