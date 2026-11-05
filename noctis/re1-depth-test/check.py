@@ -11,7 +11,11 @@ with sync_playwright() as p:
         page.on('pageerror',lambda e:errors.append(str(e)))
         page.on('requestfailed',lambda r:errors.append('Request '+r.url+': '+str(r.failure)))
         page.goto('http://127.0.0.1:8123/noctis/re1-depth-test/',wait_until='domcontentloaded',timeout=45000)
-        page.wait_for_function("document.querySelector('#state')?.textContent.includes('pronto')",timeout=90000)
+        page.wait_for_timeout(9000)
+        state=page.locator('#state').inner_text()
+        if 'pronto' not in state:
+            page.screenshot(path=str(output/f'{name}_diagnostic.png'))
+            raise RuntimeError(f'NOT READY: {state} | errors: {errors} | URL: {page.url}')
         page.locator('#start').click()
         page.wait_for_timeout(1000)
         initial=page.evaluate('window.__noctisProbe()')
