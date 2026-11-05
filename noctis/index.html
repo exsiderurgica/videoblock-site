@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<title>NOCTIS — Piazza del Gesù | Test PS1</title>
+<style>
+:root{color-scheme:dark;font-family:ui-monospace,Menlo,Consolas,monospace;background:#0b0b0c;color:#e5e2d7}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b0b0c}header{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid #34342f;padding:20px max(14px,3vw)}h1{font-size:clamp(23px,4vw,33px);letter-spacing:.19em;margin:0}header p{color:#b7ab80;font-size:10px;letter-spacing:.2em;margin:5px 0 0}header aside{font-size:11px;color:#a4a295;text-align:right}main{max-width:980px;margin:0 auto;padding:16px 14px 25px}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:15px;border:1px solid #39392f;background:#141413;border-radius:5px;margin-bottom:14px}button{border:0;background:#cbb981;color:#111;font:700 13px ui-monospace,monospace;padding:14px 16px;border-radius:3px;touch-action:manipulation}button.alt{background:#272722;color:#e5e2d7;border:1px solid #616158}button:disabled{opacity:.5}#status{font-size:11px;line-height:1.4;color:#bbb5a1;flex:1;min-width:180px}#screen{position:relative;overflow:hidden;background:#080808;border:1px solid #3b3b38;min-height:310px}#game{height:min(60vw,550px);min-height:310px;width:100%}#intro{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 35%,#303136,#0d0d10 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;pointer-events:none}#intro strong{font-size:clamp(23px,4vw,44px);letter-spacing:.21em}#intro p{font-size:12px;line-height:1.7;max-width:480px;color:#c3c2bd}#intro small{font-size:11px;color:#ad9e6c}.audio{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1px solid #38382f;padding:13px;margin:14px 0;font-size:12px}.audio b{color:#ddceb0}.audio input{accent-color:#cbb981;width:125px}.notes{font-size:12px;line-height:1.8;color:#bcb9b0}.notes b{color:#e4e2d5}a{color:#e5ce89}footer{border-top:1px solid #34342f;margin-top:19px;padding-top:13px;color:#8f8f88;font-size:11px;line-height:1.6}.pill{font-size:10px;letter-spacing:.1em;border:1px solid #645b46;border-radius:3px;padding:4px 7px;color:#d5bf8c}
+@media(max-width:700px){header{padding:15px}header aside{font-size:9px}main{padding:9px}#game{height:60vh;min-height:350px}button{padding:12px}.audio input{width:100px}}
+@media(orientation:landscape) and (max-height:560px){header{padding:6px 12px}h1{font-size:19px}header p{font-size:8px}main{padding:5px}.toolbar{padding:6px;margin-bottom:4px}#game{height:73vh;min-height:200px}.audio{padding:6px;margin:6px 0}}
+</style>
+</head>
+<body>
+<header><div><h1>NOCTIS</h1><p>NAPOLI / PIAZZA DEL GESÙ</p></div><aside><span class="pill">PS1 NATIVE — TEST 0.5</span><p>VIDEOBlock / TEMPORARY TEST</p></aside></header>
+<main>
+<div class="toolbar"><button id="start">▶ AVVIA TEST PS1</button><button id="music" class="alt">♫ MUSICA</button><button id="full" class="alt">⛶ SCHERMO</button><span id="status" role="status">Pronto · tocca Avvia</span></div>
+<section id="screen" aria-label="Emulatore PlayStation 1"><div id="game"></div><div id="intro"><strong>NOCTIS</strong><p>Primo esperimento nativo PlayStation 1. Piazza schematica, personaggio visto da dietro e controlli touch tramite emulatore.</p><small>RUOTA IL TELEFONO IN ORIZZONTALE</small></div></section>
+<div class="audio"><b>♫ NOTTE AMBIENT ZORLON 01</b><span>volume</span><input id="volume" aria-label="Volume musica" type="range" min="0" max="100" value="50"><span id="audioStatus">Tocca Musica per ascoltare</span></div>
+<p class="notes"><b>CONTROLLI</b> — Croce direzionale: cammina/ruota. ✕: interazione. □: corsa. L1/R1: passi laterali. Il menu dell'emulatore consente anche di configurare i comandi. Consigliato Chrome Android in orizzontale.</p>
+<p class="notes"><b>VERSIONE SPERIMENTALE</b> — Questa NON è ancora la ricostruzione cartografica reale di Napoli. Il protagonista è una sagoma low-poly renderizzata in 2D sopra la scena 3D. Il disco PS1 è stato compilato, ma il suo avvio effettivo nell'emulatore non è ancora stato verificato. Il test serve proprio a individuare i problemi.</p>
+<footer>La musica viene riprodotta dalla pagina web, non dall'hardware audio PS1. Nessuna BIOS Sony inclusa. Core dell'emulatore fornito da <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a>. Questa pagina è separata dal sito VideoBlock. Se lo schermo rimane nero o compare un errore, segnala il messaggio mostrato in alto.</footer>
+<audio id="bgm" src="./music/notte_ambient_zorlon_01.ogg" preload="none" loop></audio>
+</main>
+<script>
+(function(){
+const byId=id=>document.getElementById(id), start=byId('start'),status=byId('status'),bgm=byId('bgm'), music=byId('music'),volume=byId('volume'),audioStatus=byId('audioStatus');
+let running=false;
+bgm.volume=.5;
+volume.addEventListener('input',()=>{bgm.volume=+volume.value/100});
+function musicToggle(){if(bgm.paused){const r=bgm.play();if(r&&r.catch)r.catch(()=>audioStatus.textContent='Impossibile avviare la musica');} else bgm.pause()}
+music.addEventListener('click',musicToggle);
+bgm.addEventListener('play',()=>{music.textContent='Ⅱ PAUSA MUSICA';audioStatus.textContent='In riproduzione · loop'});
+bgm.addEventListener('pause',()=>{music.textContent='♫ MUSICA';audioStatus.textContent='In pausa'});
+bgm.addEventListener('error',()=>{audioStatus.textContent='Audio non disponibile'});
+byId('full').addEventListener('click',()=>{const s=byId('screen');if(!document.fullscreenElement&&s.requestFullscreen){s.requestFullscreen().catch(()=>{});}else if(document.exitFullscreen){document.exitFullscreen().catch(()=>{});}});
+start.addEventListener('click',async()=>{
+ if(running)return;
+ running=true;start.disabled=true;status.textContent='Controllo disco PS1…';
+ try{
+  const res=await fetch('./game/NOCTIS.bin',{method:'HEAD',cache:'no-store'});
+  if(!res.ok)throw Error('Disco assente: HTTP '+res.status);
+  status.textContent='Disco trovato · carico EmulatorJS…';
+  window.EJS_player='#game'; window.EJS_core='psx';window.EJS_gameName='NOCTIS Napoli v0.5';
+  window.EJS_gameUrl='./game/NOCTIS.bin';window.EJS_pathtodata='https://cdn.emulatorjs.org/stable/data/';
+  window.EJS_language='it-IT';window.EJS_startOnLoaded=true;
+  window.EJS_onGameStart=()=>status.textContent='Core avviato · verifica il rendering PS1';
+  window.EJS_VirtualGamepadSettings=[
+   {type:'dpad',location:'left',left:'50%',right:'50%',joystickInput:false,inputValues:[4,5,6,7]},
+   {type:'button',text:'✕',id:'cross',location:'right',left:75,top:72,input_value:0},
+   {type:'button',text:'□',id:'square',location:'right',left:15,top:30,input_value:1},
+   {type:'button',text:'L1',id:'l1',location:'left',left:7,top:0,fontSize:14,input_value:10},
+   {type:'button',text:'R1',id:'r1',location:'right',left:7,top:0,fontSize:14,input_value:11},
+   {type:'button',text:'START',id:'start',location:'center',left:10,top:0,fontSize:12,input_value:3}];
+  byId('intro').remove();
+  const script=document.createElement('script');script.src='https://cdn.emulatorjs.org/stable/data/loader.js';
+  script.onerror=()=>{status.textContent='Errore rete: CDN EmulatorJS non raggiungibile';start.disabled=false;running=false};
+  document.body.appendChild(script);
+ }catch(err){status.textContent=String(err.message||err);start.disabled=false;running=false}
+});
+})();
+</script>
+</body>
+</html>
