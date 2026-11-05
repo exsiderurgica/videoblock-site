@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#090a0e">
+<title>NOCTIS — Camera 01 V2 / RE1 Reboot</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#030508;color:#e7d9bd;overflow:hidden;font-family:ui-monospace,Menlo,Consolas,monospace}button{font:inherit;cursor:pointer;touch-action:none;color:#e7dbc4}
+#game{position:fixed;inset:0;overflow:hidden;background:#05070b}#stage{position:absolute;width:1280px;height:720px;left:0;top:0;transform-origin:0 0;background:#05070b;overflow:hidden}
+#background{position:absolute;inset:0;width:1280px;height:720px;display:block;object-fit:fill}
+#actorLayer{position:absolute;inset:0;width:1280px;height:720px;pointer-events:none}#actorLayer canvas{position:absolute;inset:0;width:1280px;height:720px;display:block}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 38%,transparent 24%,rgba(0,0,0,.51) 100%);z-index:2}#grain{position:absolute;inset:0;pointer-events:none;z-index:3;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.075) 3px 4px)}
+#hud{position:absolute;left:0;right:0;top:0;z-index:5;display:flex;align-items:flex-start;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 11px) 15px 11px;gap:12px;background:linear-gradient(#050507c9,#05050700);pointer-events:none;text-shadow:0 2px 6px #000}
+#brand{font-size:22px;letter-spacing:.24em;font-weight:700}#local{font-size:9px;letter-spacing:.15em;color:#e1bf8f;margin-top:6px}#objective{text-align:right;max-width:52%;font-size:10px;line-height:1.6}#objective b{display:block;color:#ffdb9f}
+#tools{position:absolute;right:14px;top:calc(env(safe-area-inset-top) + 73px);z-index:7;display:flex;gap:6px}#tools button{border:1px solid #bca78c8c;background:#07090dcf;padding:9px 10px;border-radius:4px;font-size:10px}#track{display:none}
+#stick{position:absolute;left:calc(env(safe-area-inset-left) + 20px);bottom:calc(env(safe-area-inset-bottom) + 24px);width:118px;height:118px;border-radius:50%;border:1px solid #ddd1b582;background:#070b14a3;touch-action:none;z-index:8;display:grid;place-items:center}#stick:before,#stick:after{content:"";position:absolute;background:#e0cf9c46;pointer-events:none}#stick:before{height:75%;width:1px}#stick:after{height:1px;width:75%}#knob{width:43px;height:43px;border:1px solid #e6dac0;background:#bcb094a6;border-radius:50%;pointer-events:none}
+#buttons{position:absolute;right:calc(env(safe-area-inset-right) + 17px);bottom:calc(env(safe-area-inset-bottom) + 24px);display:flex;align-items:flex-end;gap:10px;z-index:8}#buttons button{background:#090c12c7;border:1px solid #ddc9a5a6;border-radius:50%;height:67px;width:67px;font-size:10px}#buttons #use{height:83px;width:83px;font-size:13px}#buttons button:active{background:#b29669;color:#060708}
+#toast{position:absolute;left:50%;top:27%;transform:translateX(-50%);z-index:9;background:#08090de6;border:1px solid #bb9d67;padding:9px 13px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none;text-align:center;max-width:85%}#toast.on{opacity:1}
+#intro{position:absolute;z-index:12;inset:0;display:grid;place-items:center;background:#030407da;padding:18px}#panel{border:1px solid #b49a73;background:#0a0d14f1;padding:26px;width:min(450px,96vw);text-align:center;box-shadow:0 30px 75px #0009}#panel h1{font-size:29px;letter-spacing:.26em;margin:0}#panel p{font-size:12px;line-height:1.6;color:#d7c5ae}#panel button{background:#c9b083;color:#0b0d11;width:100%;padding:15px;font-weight:bold;border:0;margin:12px 0}#panel small{display:block;font-size:10px;color:#a9a69d;line-height:1.5}#status{color:#e9ce9d;font-size:11px;min-height:17px}
+#diagnostic{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);z-index:5;font-size:9px;white-space:nowrap;color:#d2c3a98f;pointer-events:none}
+@media(orientation:portrait){#brand{font-size:17px}#local{font-size:8px}#objective{font-size:9px}#tools{top:calc(env(safe-area-inset-top) + 77px)}#stick{left:12px;bottom:calc(env(safe-area-inset-bottom) + 35px);width:112px;height:112px}#buttons{bottom:calc(env(safe-area-inset-bottom) + 38px);right:12px;gap:7px}#buttons button{width:60px;height:60px}#buttons #use{width:73px;height:73px}#diagnostic{display:none}}
+@media(orientation:landscape) and (max-height:500px){#brand{font-size:17px}#local,#objective{font-size:8px}#tools{top:calc(env(safe-area-inset-top) + 50px)}#stick{width:93px;height:93px;bottom:13px}#knob{width:37px;height:37px}#buttons{bottom:12px}#buttons button{width:52px;height:52px}#buttons #use{width:63px;height:63px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+</head><body>
+<div id="game">
+<div id="stage"><img id="background" alt="Piazza del Gesù Nuovo — ricostruzione notturna prerenderizzata"><div id="actorLayer"></div></div>
+<div id="vignette"></div><div id="grain"></div>
+<div id="hud"><div><div id="brand">NOCTIS</div><div id="local">NAPOLI / PIAZZA DEL GESÙ NUOVO</div></div><div id="objective"><b>CAMERA 01 / IL SIGILLO</b><span id="task">Raggiungi la base della guglia</span></div></div>
+<div id="tools"><button id="music">♫ AUDIO</button><button id="pick">MP3</button><button id="reset">↺</button><button id="full">⛶</button><input id="track" type="file" accept="audio/*"></div>
+<div id="stick"><div id="knob"></div></div><div id="buttons"><button id="run">CORRI</button><button id="use">AZIONE</button></div>
+<div id="toast"></div><div id="diagnostic">EXPERIMENTAL CAMERA 01 · SAME-SCENE BACKGROUND / DEPTH / COLLISIONS</div>
+<div id="intro"><div id="panel"><h1>NOCTIS</h1><p>CAMERA 01 · RE1 REBOOT<br>Nuova ricostruzione di Piazza del Gesù Nuovo. Una scena 3D crea lo sfondo fisso; il personaggio viene renderizzato separatamente con profondità e collisioni ricavate dalla stessa geometria.</p><button id="start" disabled>PREPARAZIONE SCENA…</button><div id="status">Preparazione inquadratura 3D…</div><small>Joystick: avanti/indietro, ruota · CORRI · AZIONE<br>PC: W / S, A / D, SHIFT, E<br>Prototipo tecnico: facciate e personaggio ancora provvisori.</small></div></div>
+<audio id="bgm" loop preload="none"></audio>
+</div>
+<script type="module" src="./game.js?v=1"></script>
+</body></html>
