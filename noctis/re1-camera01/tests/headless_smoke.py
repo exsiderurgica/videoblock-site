@@ -37,6 +37,28 @@ def check(page, name):
         raise AssertionError("Caricamento non completato: " + json.dumps(status, ensure_ascii=False))
     if not status["heroOK"] or not status["zombieOK"] or not status["modelIsPhoto"]:
         raise AssertionError("Modelli o animazioni non pronti: " + str(status))
+    # Verifica geometrica della prospettiva: gli 8 occlusori devono
+    # essere proiettati precisamente sulle aree ritagliate dallo sfondo.
+    projection=page.evaluate("""() => {
+      const e=foregroundMeshes.map((mesh,i)=>{
+        const poly=MASKS[i].poly,xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]);
+        const x0=Math.floor(Math.min(...xs))-2,y0=Math.floor(Math.min(...ys))-2;
+        const x1=Math.ceil(Math.max(...xs))+2,y1=Math.ceil(Math.max(...ys))+2;
+        const q=mesh.position.clone().project(cam);
+        return {i,u:(q.x+1)*IW/2,v:(1-q.y)*IH/2,ex:(x0+x1)/2,ey:(y0+y1)/2,
+          w:mesh.geometry.parameters.width*CAL.f/(-mesh.position.z),
+          h:mesh.geometry.parameters.height*CAL.f/(-mesh.position.z),
+          ew:x1-x0,eh:y1-y0,depth:-mesh.position.z}
+      });
+      return {meshes:e,legacyMasks:document.getElementById('masks').children.length}
+    }""")
+    if len(projection["meshes"]) != 8 or projection["legacyMasks"]:
+        raise AssertionError("Occlusori profondita' mancanti o maschere CSS legacy: "+str(projection))
+    for m in projection["meshes"]:
+        if max(abs(m["u"]-m["ex"]),abs(m["v"]-m["ey"]),
+               abs(m["w"]-m["ew"]),abs(m["h"]-m["eh"])) > .05:
+            raise AssertionError("Occlusore non allineato ai pixel del render: "+str(m))
+    print("Occlusori 3D allineati al render: 8/8",flush=True)
     page.locator("#start").click()
     page.wait_for_timeout(800)
     state0 = page.evaluate("window.__noctis.probe()")
@@ -58,6 +80,16 @@ def check(page, name):
     page.wait_for_timeout(250)
     state1 = page.evaluate("window.__noctis.probe()")
     page.screenshot(path=str(OUT / (name + "-movimento.png")), full_page=True)
+    if name == "desktop":
+        # Il protagonista si posiziona realmente prima dietro, poi davanti
+        # a un paletto (base immagine y=556, stessa Camera 01).
+        behind=page.evaluate("window.__noctis.setImg(356,536)")
+        page.wait_for_timeout(200)
+        page.screenshot(path=str(OUT / "desktop-paletti-dietro.png"),full_page=True)
+        front=page.evaluate("window.__noctis.setImg(356,600)")
+        page.wait_for_timeout(200)
+        page.screenshot(path=str(OUT / "desktop-paletti-davanti.png"),full_page=True)
+        print("Occlusione paletti testata a due profondita': "+str({"dietro":behind,"davanti":front}),flush=True)
     # Anteprima JPEG compressa nei log per poter ispezionare davvero il render,
     # oltre agli screenshot PNG originali conservati come artefatto GitHub.
     preview=base64.b64encode(page.screenshot(type="jpeg",quality=48,full_page=True)).decode("ascii")
