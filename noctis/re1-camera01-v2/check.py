@@ -11,7 +11,7 @@ with sync_playwright() as p:
     errors=[]
     page.on('pageerror',lambda exc:errors.append('JS '+str(exc)))
     page.on('requestfailed',lambda req: errors.append('Request '+req.url+' '+str(req.failure)) if not req.url.startswith('blob:') else None)
-    page.goto('http://127.0.0.1:8123/noctis/re1-camera01-v2/',wait_until='domcontentloaded',timeout=60000)
+    page.goto('http://127.0.0.1:8123/noctis/re1-camera01-v2/?debug=1',wait_until='domcontentloaded',timeout=60000)
     page.wait_for_timeout(3000)
     try:
       page.wait_for_function("window.__noctisProbe && window.__noctisProbe().bakedReady",timeout=75000)
@@ -34,6 +34,14 @@ with sync_playwright() as p:
     p1=page.evaluate('window.__noctisProbe()')
     assert p1['player']['z']<p0['player']['z']-.8,(p0,p1)
     page.screenshot(path=str(out/f'{name}_walking.png'))
+    front=page.evaluate("window.__noctisDebugSetPlayer(-8.7,2.0)")
+    page.wait_for_timeout(250)
+    page.screenshot(path=str(out/f'{name}_in_front_of_spire.png'))
+    behind=page.evaluate("window.__noctisDebugSetPlayer(-8.7,-17.0)")
+    page.wait_for_timeout(250)
+    page.screenshot(path=str(out/f'{name}_behind_spire.png'))
+    assert behind['activeMasks']>front['activeMasks']+15,(front,behind)
+
     print(name,'monument',p0['monument'],'feet',p0['feet'],'masks',p0['maskCount'],'actor',p1['player'],'js_errors',errors,flush=True)
     if errors: raise AssertionError(errors[:10])
     page.close()
