@@ -16,11 +16,11 @@
 <main>
 <div class="toolbar"><button id="start">▶ AVVIA TEST PS1</button><button id="music" class="alt">♫ MUSICA</button><button id="full" class="alt">⛶ SCHERMO</button><span id="status" role="status">Pronto · tocca Avvia</span></div>
 <section id="screen" aria-label="Emulatore PlayStation 1"><div id="game"></div><div id="intro"><strong>NOCTIS</strong><p>Primo esperimento nativo PlayStation 1. Piazza schematica, personaggio visto da dietro e controlli touch tramite emulatore.</p><small>RUOTA IL TELEFONO IN ORIZZONTALE</small></div></section>
-<div class="audio"><b>♫ NOTTE AMBIENT ZORLON 01</b><span>volume</span><input id="volume" aria-label="Volume musica" type="range" min="0" max="100" value="50"><span id="audioStatus">Tocca Musica per ascoltare</span></div>
+<div class="audio"><b>♫ NOTTE AMBIENT ZORLON 01</b><span>volume</span><input id="volume" aria-label="Volume musica" type="range" min="0" max="100" value="50"><span id="audioStatus">Seleziona il tuo MP3 dal telefono per ascoltarlo</span><label style="font-size:11px">CARICA MP3 <input id="localMusic" type="file" accept="audio/*" style="max-width:180px"></label></div>
 <p class="notes"><b>CONTROLLI</b> — Croce direzionale: cammina/ruota. ✕: interazione. □: corsa. L1/R1: passi laterali. Il menu dell'emulatore consente anche di configurare i comandi. Consigliato Chrome Android in orizzontale.</p>
 <p class="notes"><b>VERSIONE SPERIMENTALE</b> — Questa NON è ancora la ricostruzione cartografica reale di Napoli. Il protagonista è una sagoma low-poly renderizzata in 2D sopra la scena 3D. Il disco PS1 è stato compilato, ma il suo avvio effettivo nell'emulatore non è ancora stato verificato. Il test serve proprio a individuare i problemi.</p>
 <footer>La musica viene riprodotta dalla pagina web, non dall'hardware audio PS1. Nessuna BIOS Sony inclusa. Core dell'emulatore fornito da <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a>. Questa pagina è separata dal sito VideoBlock. Se lo schermo rimane nero o compare un errore, segnala il messaggio mostrato in alto.</footer>
-<audio id="bgm" src="./music/notte_ambient_zorlon_01.ogg" preload="none" loop></audio>
+<audio id="bgm" preload="none" loop></audio>
 </main>
 <script>
 (function(){
@@ -30,6 +30,7 @@ bgm.volume=.5;
 volume.addEventListener('input',()=>{bgm.volume=+volume.value/100});
 function musicToggle(){if(bgm.paused){const r=bgm.play();if(r&&r.catch)r.catch(()=>audioStatus.textContent='Impossibile avviare la musica');} else bgm.pause()}
 music.addEventListener('click',musicToggle);
+byId('localMusic').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;bgm.src=URL.createObjectURL(f);audioStatus.textContent='Caricato: '+f.name;bgm.play().catch(()=>audioStatus.textContent='Tocca ♫ MUSICA per avviare');});
 bgm.addEventListener('play',()=>{music.textContent='Ⅱ PAUSA MUSICA';audioStatus.textContent='In riproduzione · loop'});
 bgm.addEventListener('pause',()=>{music.textContent='♫ MUSICA';audioStatus.textContent='In pausa'});
 bgm.addEventListener('error',()=>{audioStatus.textContent='Audio non disponibile'});
