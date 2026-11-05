@@ -1,0 +1,30 @@
+name: NOCTIS - acquire CC0 animated civilian character
+on:
+  push:
+    branches: [noctis/civilian-character-trial]
+    paths:
+      - '.github/workflows/noctis-civilian-download.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and validate CC0 animated civilian
+        run: |
+          python -m pip install requests
+          python noctis/re1-civilian/download_sam.py
+      - name: Preserve model in separate experimental branch
+        run: |
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git add noctis/re1-civilian/assets/civilian_animated.glb
+          if ! git diff --cached --quiet; then
+            git commit -m 'NOCTIS: add CC0 civilian skinned animation collection'
+            git push
+          fi
