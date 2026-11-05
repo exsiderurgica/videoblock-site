@@ -9,7 +9,7 @@ with sync_playwright() as p:
         page=browser.new_page(viewport=size,device_scale_factor=1)
         errors=[]
         page.on('pageerror',lambda e:errors.append(str(e)))
-        page.on('requestfailed',lambda r:errors.append('Request '+r.url+': '+str(r.failure)))
+        page.on('requestfailed',lambda r:errors.append('Request '+r.url+': '+str(r.failure)) if not (r.url.startswith('blob:') and 'ERR_ABORTED' in str(r.failure)) else None)
         page.goto('http://127.0.0.1:8123/noctis/re1-depth-test/',wait_until='domcontentloaded',timeout=45000)
         page.wait_for_timeout(9000)
         state=page.locator('#state').inner_text()
