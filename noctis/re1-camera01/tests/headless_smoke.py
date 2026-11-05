@@ -2,6 +2,7 @@
 """Test reale in Chromium: una sola Camera 01, su desktop e Android emulato."""
 import json
 import os
+import base64
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -14,7 +15,7 @@ def probe(page):
     return page.evaluate("""() => ({
       heroOK: window.__heroOk === true,
       zombieOK: window.__zomOk === true,
-      modelIsPhoto: !!window.actor?.hero?.photo,
+      modelIsPhoto: !!actor?.hero?.photo,
       modelLoaded: !!window.__noctis,
       startDisabled: document.getElementById('start')?.disabled,
       startText: document.getElementById('start')?.textContent,
@@ -34,7 +35,7 @@ def check(page, name):
     if status["startDisabled"]:
         page.screenshot(path=str(OUT / (name + "-errore.png")))
         raise AssertionError("Caricamento non completato: " + json.dumps(status, ensure_ascii=False))
-    if not status["heroOK"] or not status["zombieOK"]:
+    if not status["heroOK"] or not status["zombieOK"] or not status["modelIsPhoto"]:
         raise AssertionError("Modelli o animazioni non pronti: " + str(status))
     page.locator("#start").click()
     page.wait_for_timeout(800)
@@ -57,6 +58,13 @@ def check(page, name):
     page.wait_for_timeout(250)
     state1 = page.evaluate("window.__noctis.probe()")
     page.screenshot(path=str(OUT / (name + "-movimento.png")), full_page=True)
+    # Anteprima JPEG compressa nei log per poter ispezionare davvero il render,
+    # oltre agli screenshot PNG originali conservati come artefatto GitHub.
+    preview=base64.b64encode(page.screenshot(type="jpeg",quality=48,full_page=True)).decode("ascii")
+    print("NOCTIS_PREVIEW_"+name+"_BEGIN",flush=True)
+    for i in range(0,len(preview),1600):
+        print(preview[i:i+1600],flush=True)
+    print("NOCTIS_PREVIEW_"+name+"_END",flush=True)
     delta = ((state1["x"]-state0["x"])**2+(state1["z"]-state0["z"])**2)**.5
     result={"assets":status,"start":state0,"end":state1,"metriPercorsi":round(delta,3),"jsErrors":errors}
     summary[name] = result
