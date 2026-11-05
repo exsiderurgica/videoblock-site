@@ -1,0 +1,39 @@
+name: NOCTIS Camera 01 - import archive
+on:
+  push:
+    branches:
+      - noctis/camera01-verifica-20261106
+    paths:
+      - "noctis/.camera01-import/**"
+      - ".github/workflows/noctis-camera01-import.yml"
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Restore source files from verified archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f noctis/.camera01-import/part-00.bin ]; then
+            echo "Camera 01 already imported."
+            exit 0
+          fi
+          cat noctis/.camera01-import/part-*.bin > /tmp/noctis-camera01.zip
+          echo "428be5e71b307049ad6cd7cc756c53ad85d1df87f23e1bd3c510ab73bef8340d  /tmp/noctis-camera01.zip" | sha256sum -c -
+          unzip -oq /tmp/noctis-camera01.zip
+          test -f noctis/re1-camera01/index.html
+          test -f noctis/re1-camera01/hero2.txt
+          test -f noctis/re1-camera01/zombie.txt
+          bash noctis/re1-camera01/src/build.sh
+          rm -rf noctis/.camera01-import
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A noctis/re1-camera01 noctis/.camera01-import
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "NOCTIS: import Camera 01 from author's verified ZIP"
+          git push origin HEAD:noctis/camera01-verifica-20261106
