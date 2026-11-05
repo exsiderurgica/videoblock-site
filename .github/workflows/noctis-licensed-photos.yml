@@ -20,15 +20,19 @@ jobs:
       - run: python -m pip install --disable-pip-version-check pillow requests
       - name: Download and transform CC BY-SA photographs
         run: python noctis/photo-pipeline/fetch_licensed_photos.py
+      - name: Download OpenStreetMap building footprints and streets
+        run: python noctis/photo-pipeline/fetch_osm.py
       - name: Upload produced licensed materials
         uses: actions/upload-artifact@v4
         with:
           name: noctis-real-photographic-textures
-          path: noctis/photos/
+          path: |
+            noctis/photos/
+            noctis/geo/
       - name: Commit to isolated research branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add noctis/photos
+          git add noctis/photos noctis/geo
           git commit -m "NOCTIS: add properly credited photographic reference materials" || echo 'No new assets'
           git push
