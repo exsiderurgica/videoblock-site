@@ -90,8 +90,20 @@ $('action').addEventListener('pointerdown',e=>{e.preventDefault();action()});$('
 window.addEventListener('keydown',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(k))e.preventDefault();keys[k]=true;if(k==='e'||k===' ')if(!e.repeat)action()});window.addEventListener('keyup',e=>keys[e.key.length===1?e.key.toLowerCase():e.key]=false);
 // Desktop mouse camera drag, only if event began outside virtual controls.
 let mouseDown=false,px=0;canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){mouseDown=true;px=e.clientX;canvas.setPointerCapture(e.pointerId)}});canvas.addEventListener('pointermove',e=>{if(mouseDown){camera.yaw-=(e.clientX-px)*.006;px=e.clientX}});canvas.addEventListener('pointerup',()=>mouseDown=false);
-const audio=$('bgm');audio.volume=.45;audio.src='https://drive.google.com/uc?export=download&id=1fHojYdrZhmaQ22jPvqP-rsiRZcwBoI5t';function playAudio(){audio.play().then(()=>{$('music').textContent='Ⅱ MUSICA'}).catch(()=>{$('music').textContent='♫ MP3';notice('SELEZIONA MP3 SUL TELEFONO',3)})}
-$('start').addEventListener('click',()=>{panel.style.display='none';playing=true;last=performance.now();playAudio()});$('music').addEventListener('click',()=>{if(audio.paused)playAudio();else{audio.pause();$('music').textContent='♫ MUSICA'}});$('loadTrack').addEventListener('click',()=>$('musicfile').click());$('musicfile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){audio.src=URL.createObjectURL(f);playAudio()}});$('reset').addEventListener('click',()=>{player.x=7.5;player.z=13.5;player.yaw=0;camera.yaw=0;camera.pitch=.08;notice('POSIZIONE RIPRISTINATA',1.5)});$('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else $('app').requestFullscreen?.().catch(()=>{})});
+const audio=$('bgm');audio.volume=.45;let trackUrl='',audioReady=false;const song='NOTTE AMBIENT ZORLON 01';
+const musicDB=new Promise(resolve=>{try{const req=indexedDB.open('noctis-soundtrack',1);req.onupgradeneeded=()=>req.result.createObjectStore('track');req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null)}catch(e){resolve(null)}});
+function audioMessage(t){notice(t,3)}
+function setTrack(blob){if(trackUrl)URL.revokeObjectURL(trackUrl);trackUrl=URL.createObjectURL(blob);audio.src=trackUrl;audio.load();audioReady=true;$('music').textContent='♫ MUSICA'}
+async function restoreTrack(){const db=await musicDB;if(!db)return;const tr=db.transaction('track','readonly').objectStore('track').get('audio');tr.onsuccess=()=>{if(tr.result)setTrack(tr.result)}}
+async function saveTrack(blob){const db=await musicDB;if(!db)return;try{db.transaction('track','readwrite').objectStore('track').put(blob,'audio')}catch(e){}}
+function playAudio(){if(!audioReady){audioMessage('SCEGLI MP3 DAL TELEFONO (UNA SOLA VOLTA)');$('musicfile').click();return}audio.play().then(()=>{$('music').textContent='Ⅱ MUSICA'}).catch(()=>audioMessage('TOCCA MUSICA PER ATTIVARE AUDIO'))}
+restoreTrack();$('music').textContent='♫ CARICA MP3';
+$('start').addEventListener('click',()=>{panel.style.display='none';playing=true;last=performance.now();playAudio()});
+$('music').addEventListener('click',()=>{if(audio.paused)playAudio();else{audio.pause();$('music').textContent='♫ MUSICA'}});
+$('loadTrack').addEventListener('click',()=>$('musicfile').click());
+$('musicfile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;setTrack(f);saveTrack(f);playAudio();audioMessage('BRANO MEMORIZZATO PER LE PROSSIME PARTITE')});
+$('reset').addEventListener('click',()=>{player.x=7.5;player.z=13.5;player.yaw=0;camera.yaw=0;camera.pitch=.08;notice('POSIZIONE RIPRISTINATA',1.5)});
+$('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else $('app').requestFullscreen?.().catch(()=>{})});
 window.addEventListener('blur',()=>{moveStick={x:0,y:0};runTouch=false;for(let k in keys)delete keys[k]});
 })();
 </script>
