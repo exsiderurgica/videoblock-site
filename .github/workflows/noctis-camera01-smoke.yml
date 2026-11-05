@@ -35,7 +35,7 @@ jobs:
           from PIL import Image
           from pathlib import Path
           directory=Path("noctis/re1-camera01/test-renders")
-          for name in ["desktop-inizio", "desktop-movimento", "android-inizio", "android-movimento"]:
+          for name in ["desktop-inizio", "desktop-movimento", "desktop-paletti-dietro", "desktop-paletti-davanti", "android-inizio", "android-movimento"]:
               path=directory/(name+".png")
               if not path.exists():
                   print("SCREENSHOT_MISSING",name)
