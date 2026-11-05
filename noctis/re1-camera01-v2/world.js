@@ -26,13 +26,17 @@ export function makeWorld(scene){
   // Night sky is an original prerender background texture, not a photo.
   const sky=document.createElement('canvas');sky.width=1280;sky.height=720;
   const sk=sky.getContext('2d'),gradient=sk.createLinearGradient(0,0,0,720);
-  gradient.addColorStop(0,'#070e1e');gradient.addColorStop(.53,'#10243e');gradient.addColorStop(1,'#27334b');
+  gradient.addColorStop(0,'#030711');gradient.addColorStop(.58,'#0c1629');gradient.addColorStop(1,'#162337');
   sk.fillStyle=gradient;sk.fillRect(0,0,1280,720);
-  for(let i=0;i<85;i++){
-    const x=rnd()*1280,y=rnd()*440,alpha=.02+rnd()*.09;
-    const w=35+rnd()*210,h=5+rnd()*28;
-    sk.fillStyle='rgba(151,167,192,'+alpha+')';sk.beginPath();
-    sk.ellipse(x,y,w,h,-.17,0,2*Math.PI);sk.fill();
+  // Very faint elongated haze, no visible cartoon ovals.
+  for(let i=0;i<10;i++){
+    const x=rnd()*1280,y=65+rnd()*340;
+    const w=180+rnd()*260,h=9+rnd()*15;
+    const haze=sk.createLinearGradient(x-w,y,x+w,y);
+    haze.addColorStop(0,'rgba(92,105,127,0)');
+    haze.addColorStop(.5,'rgba(92,105,127,'+(.007+rnd()*.013)+')');
+    haze.addColorStop(1,'rgba(92,105,127,0)');
+    sk.fillStyle=haze;sk.fillRect(x-w,y,w*2,h);
   }
   scene.background=new THREE.CanvasTexture(sky);
   scene.fog=new THREE.Fog(0x121925,65,160);
