@@ -4,13 +4,13 @@ const HERO_SPEED={Walk_Relaxed:1.25,Walk_Brisk:1.75,Jog:2.9,Run:4.3};   // m/s s
 /* Protagonista costruito dalle 4 foto (sagome + texture fotografica), scheletro proprio con nomi compatibili col retarget Mixamo */
 function loadHero(done){
   if(!THREE.GLTFLoader){done&&done(false);return}
-  fetch('hero2.txt').then(r=>r.text()).then(t=>{const bin=Uint8Array.from(atob(t),c=>c.charCodeAt(0));new THREE.GLTFLoader().parse(bin.buffer,'',g=>{
+  fetch('hero2.txt').then(r=>{if(!r.ok)throw Error('hero2.txt: HTTP '+r.status);return r.text()}).then(t=>{const bin=Uint8Array.from(atob(t),c=>c.charCodeAt(0));new THREE.GLTFLoader().parse(bin.buffer,'',g=>{
     const m=g.scene,grp=new THREE.Group();grp.add(m);grp.rotation.y=Math.PI;actor.root.add(grp);
     m.traverse(o=>{if(o.isMesh){o.frustumCulled=false;const mt=o.material;mt.metalness=0;mt.roughness=.9;mt.vertexColors=!!o.geometry.attributes.color;mt.color.setRGB(1,1,1);mt.needsUpdate=true;if(mt.map){mt.map.anisotropy=4}}});
     actor.root.children.forEach(c=>{if(c!==grp&&c!==actor.blob)c.visible=false});
     const bn={};m.traverse(o=>{if(o.isBone)bn[o.name]=o});
     const H={photo:true,grp,m,bn,mirrored:false};actor.hero=H;window.__heroBones=Object.keys(bn).length;
-    loadSrc(H).then(()=>done&&done(true),e=>{console.error(e);done&&done(true)})},e=>{console.error(e);loadSamHero(done)})}).catch(e=>{console.error(e);loadSamHero(done)});
+    loadSrc(H).then(()=>done&&done(true),e=>{console.error('Animazioni del protagonista non caricate:',e);done&&done(false)})},e=>{console.error('Errore nel modello del protagonista:',e);done&&done(false)})}).catch(e=>{console.error('hero2.txt non caricato:',e);done&&done(false)});
 }
 function photoTex(mt,url,rep){const t=new THREE.TextureLoader().load(url);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.encoding=THREE.sRGBEncoding;mt.map=t;mt.color.setRGB(.8,.8,.8);mt.normalMap=null;mt.needsUpdate=true}
 function loadSamHero(done){

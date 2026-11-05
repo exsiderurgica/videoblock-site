@@ -17,6 +17,8 @@ function resolve(prev){
 const inp={keys:{},use:false};let runHold=false,sp=null;const sv={x:0,y:0};
 addEventListener('keydown',e=>{inp.keys[e.code]=true;if(e.code==='KeyE'||e.code==='Space')inp.use=true;if(e.code.startsWith('Arrow')||e.code==='Space')e.preventDefault()});
 addEventListener('keyup',e=>{inp.keys[e.code]=false});
+// Non lasciare tasti o corsa virtuale premuti quando Android cambia app o la finestra perde il focus.
+addEventListener('blur',()=>{inp.keys={};inp.use=false;runHold=false;sv.x=sv.y=0;knob.style.transform='';$('run').classList.remove('on')});
 const stick=$('stick'),knob=$('knob');
 function sm(e){const b=stick.getBoundingClientRect(),r=b.width/2;let x=(e.clientX-b.left-r)/r,y=(e.clientY-b.top-r)/r;const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}sv.x=x;sv.y=y;knob.style.transform='translate('+x*r*.55+'px,'+y*r*.55+'px)'}
 stick.addEventListener('pointerdown',e=>{sp=e.pointerId;stick.setPointerCapture(sp);sm(e)});stick.addEventListener('pointermove',e=>{if(e.pointerId===sp)sm(e)});
@@ -61,22 +63,29 @@ function fit(){const fr=$('frame');VW.portrait=innerHeight>innerWidth;
   pan()}
 function pan(){let x=0;if(VW.portrait){const u=g2img(actor.x,actor.z)[0]*VW.s,max=Math.max(0,IW*VW.s-innerWidth);x=Math.max(0,Math.min(max,u-innerWidth/2))}
   $('stage').style.transform='translate('+(-x)+'px,0) scale('+VW.s+')'}
+const ready={bg:false,hero:false,zombie:false,error:false};
+function assetStatus(key,ok){
+  const st=$('start');
+  if(!ok){ready.error=true;st.disabled=true;st.textContent=({hero:'ERRORE PERSONAGGIO 3D',zombie:'ERRORE ZOMBIE 3D',bg:'ERRORE SFONDO'})[key];return}
+  ready[key]=true;
+  if(!ready.error&&ready.bg&&ready.hero&&ready.zombie){st.disabled=false;st.textContent='INIZIA'}
+}
 function boot(){
   fit();addEventListener('resize',fit);
   try{const nz=cvs(192,192,(c,w,h)=>{const id=c.createImageData(w,h);for(let i=0;i<id.data.length;i+=4){const v=Math.random()*255;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=255}c.putImageData(id,0,0)});$('grain').style.background='url('+nz.toDataURL()+')';
     const mk=()=>cvs(512,512,(c,w,h)=>{for(let i=0;i<70;i++){const x=Math.random()*w,y=Math.random()*h,r=50+Math.random()*110,g=c.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,'rgba(150,170,175,.35)');g.addColorStop(1,'rgba(150,170,175,0)');c.fillStyle=g;c.fillRect(x-r,y-r,2*r,2*r)}}).toDataURL();
     const fu='url('+mk()+')';$('fog1').style.backgroundImage=fu;$('fog2').style.backgroundImage=fu;$('fog1').style.backgroundRepeat=$('fog2').style.backgroundRepeat='repeat-x';$('fog1').style.backgroundSize=$('fog2').style.backgroundSize='982px 941px'}catch(e){}
   for(const g of [[535,412,150],[232,436,110],[42,440,90]]){const d=document.createElement('div');d.className='glow';d.style.cssText='left:'+(g[0]-g[2]/2)+'px;top:'+(g[1]-g[2]/2)+'px;width:'+g[2]+'px;height:'+g[2]+'px;animation-delay:'+(-Math.random()*3)+'s';$('glows').appendChild(d)}
-  loadHero(ok=>{window.__heroOk=ok});
-  buildZombie();
+  loadHero(ok=>{window.__heroOk=ok;assetStatus('hero',ok)});
+  buildZombie(ok=>{window.__zomOk=ok;assetStatus('zombie',ok)});
   const img=new Image();img.onload=()=>{
     $('bg').getContext('2d').drawImage(img,0,0);
     MASKS.forEach(m=>{const xs=m.poly.map(p=>p[0]),ys=m.poly.map(p=>p[1]),x0=Math.floor(Math.min(...xs))-2,y0=Math.floor(Math.min(...ys))-2,x1=Math.ceil(Math.max(...xs))+2,y1=Math.ceil(Math.max(...ys))+2;
       const c=cvs(x1-x0,y1-y0,(g)=>{g.beginPath();m.poly.forEach((p,i)=>i?g.lineTo(p[0]-x0,p[1]-y0):g.moveTo(p[0]-x0,p[1]-y0));g.closePath();g.clip();g.drawImage(img,-x0,-y0)});
       c.className='mask';c.style.cssText='position:absolute;left:'+x0+'px;top:'+y0+'px;display:none';$('masks').appendChild(c);maskEls.push(c)});
-    const st=$('start');st.disabled=false;st.textContent='INIZIA';render()};
-  img.onerror=()=>{$('start').textContent='SFONDO NON CARICATO'};img.src='bg.jpg';
-  $('start').addEventListener('click',()=>{$('intro').style.display='none';running=true;last=performance.now();audioStart();say('Qualcosa si muove nella piazza.',3400)});
+    assetStatus('bg',true);render()};
+  img.onerror=()=>assetStatus('bg',false);img.src='bg.jpg';
+  $('start').addEventListener('click',()=>{if($('start').disabled)return;$('intro').style.display='none';running=true;last=performance.now();audioStart();say('Qualcosa si muove nella piazza.',3400)});
   const home=()=>{const g=img2g(330,790);actor.x=g[0];actor.z=g[1];actor.yaw=.3;actor.speed=0};home();
   $('reset').addEventListener('click',home);
   $('aud').addEventListener('click',()=>{const on=audioToggle();$('aud').textContent=on?'♪ AUDIO':'♪ MUTO'});$('dbgb').addEventListener('click',()=>{dbgOn=!dbgOn;$('dbg').hidden=!dbgOn;if(dbgOn)drawDebug()});
@@ -85,5 +94,5 @@ function boot(){
 window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),masksShown:maskEls.filter(m=>m.style.display==='block').length}),
   setImg:(u,v,yaw=actor.yaw)=>{const g=img2g(u,v);actor.x=g[0];actor.z=g[1];actor.yaw=yaw;actor.speed=0;resolve({x:actor.x,z:actor.z});update(.016);render();return window.__noctis.probe()},
   step:(n,f,t,run)=>{for(let i=0;i<n;i++){inp.keys={KeyW:f>0,KeyS:f<0,KeyA:t<0,KeyD:t>0,ShiftLeft:!!run};update(1/60)}inp.keys={};render();return window.__noctis.probe()},
-  use:()=>{inp.use=true;update(.016)},start:()=>{$('intro').style.display='none';running=true;last=performance.now()},debug:(on)=>{dbgOn=on;$('dbg').hidden=!on;if(on)drawDebug()}};
+  use:()=>{inp.use=true;update(.016)},start:()=>{if($('start').disabled)return false;$('intro').style.display='none';running=true;last=performance.now()},debug:(on)=>{dbgOn=on;$('dbg').hidden=!on;if(on)drawDebug()}};
 boot();

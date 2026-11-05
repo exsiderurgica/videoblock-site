@@ -1,9 +1,10 @@
 /* ===== Zombie Pulcinella: stessa pipeline del protagonista (mesh skinnata + animazioni Mixamo rallentate e scoordinate) ===== */
 const ZOM={root:null,x:0,z:0,yaw:0,ph:0,t:0,next:4,speed:0,H:null,lastHalf:-1};
-function buildZombie(){
+function buildZombie(done){
+  const finish=ok=>{window.__zomOk=ok;if(done)done(ok)};
   const g=img2g(430,600);ZOM.x=g[0];ZOM.z=g[1];ZOM.yaw=Math.PI;
-  if(!THREE.GLTFLoader)return;
-  fetch('zombie.txt').then(r=>r.text()).then(t=>{const bin=Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+  if(!THREE.GLTFLoader){finish(false);return}
+  fetch('zombie.txt').then(r=>{if(!r.ok)throw Error('zombie.txt: HTTP '+r.status);return r.text()}).then(t=>{const bin=Uint8Array.from(atob(t),c=>c.charCodeAt(0));
     new THREE.GLTFLoader().parse(bin.buffer,'',gl=>{
       const root=new THREE.Group();scene.add(root);ZOM.root=root;
       const m=gl.scene,grp=new THREE.Group();grp.add(m);grp.rotation.y=Math.PI;root.add(grp);
@@ -11,8 +12,8 @@ function buildZombie(){
       const bn={};m.traverse(o=>{if(o.isBone)bn[o.name]=o});
       const H={photo:true,grp,m,bn,mirrored:false};ZOM.H=H;
       root.position.set(ZOM.x,0,ZOM.z);
-      loadSrc(H).then(()=>{window.__zomOk=true},e=>{console.error(e)});
-    },e=>console.error(e))}).catch(e=>console.error(e));
+      loadSrc(H).then(()=>finish(true),e=>{console.error('Animazioni di Pulcinella non caricate:',e);finish(false)});
+    },e=>{console.error('Modello Pulcinella non valido:',e);finish(false)})}).catch(e=>{console.error('zombie.txt non caricato:',e);finish(false)});
 }
 /* sopra l'animazione: inclinazione, testa penzoloni, spalle storte, rumore lento = camminata scoordinata */
 function zShamble(H,t,sp){
