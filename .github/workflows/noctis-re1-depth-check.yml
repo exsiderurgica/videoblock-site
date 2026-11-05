@@ -1,0 +1,34 @@
+name: NOCTIS RE1 - fixed camera ground and collision check
+on:
+  push:
+    branches: [noctis/re1-depth-calibration-20261105]
+    paths:
+      - 'noctis/re1-depth-test/**'
+      - '.github/workflows/noctis-re1-depth-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Playwright Chromium
+        run: |
+          python -m pip install playwright
+          python -m playwright install chromium
+          python -m playwright install-deps chromium
+      - name: Render fixed camera in three Android/desktop aspect ratios
+        run: |
+          python -m http.server 8123 --bind 127.0.0.1 >/tmp/noctis-http.log 2>&1 &
+          python noctis/re1-depth-test/check.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: noctis-re1-depth-real-browser-screenshots
+          path: noctis/re1-depth-test/test-renders/*.png
+          if-no-files-found: warn
