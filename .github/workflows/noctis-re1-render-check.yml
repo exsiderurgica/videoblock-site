@@ -1,0 +1,35 @@
+name: NOCTIS - fixed camera browser render test
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/noctis-re1-render-check.yml'
+      - 'noctis/re1-prototype/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install browser testing
+        run: |
+          python -m pip install --disable-pip-version-check playwright
+          python -m playwright install chromium
+      - name: Run real WebGL screenshots (portrait and landscape)
+        run: |
+          python -m http.server 8123 --bind 127.0.0.1 >/tmp/noctis-http.log 2>&1 &
+          python -m playwright install-deps chromium
+          python noctis/re1-prototype/playwright_check.py
+      - name: Keep actual gameplay screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noctis-re1-real-browser-screenshots
+          path: noctis/re1-prototype/test-renders/*.png
+          if-no-files-found: warn
