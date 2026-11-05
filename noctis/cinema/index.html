@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#080909">
+<meta name="description" content="NOCTIS — prova cinematografica browser, Piazza del Gesù, Napoli, horror anni 90."><title>NOCTIS / Piazza del Gesù — Cinema Test 0.8</title>
+<style>
+:root{color-scheme:dark;--gold:#d5be89;--text:#e5dccd;--dim:#b0a38a}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050506;font-family:'Courier New',monospace;color:var(--text);overscroll-behavior:none}button{font-family:inherit;touch-action:manipulation}#app{position:fixed;inset:0;overflow:hidden;background:#030405}#frame{position:absolute;inset:0;display:block;width:100%;height:100%;image-rendering:pixelated;touch-action:none}#scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#000 4px);opacity:.08}#shade{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 18vw 2vw #0008}#hud{position:absolute;top:env(safe-area-inset-top);left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:12px 16px;text-shadow:1px 2px 2px #000;background:linear-gradient(#020304b8,transparent);pointer-events:none}#title{font-size:clamp(16px,3.4vw,28px);font-weight:bold;letter-spacing:.25em}#place{font-size:10px;letter-spacing:.13em;color:var(--gold);margin-top:5px}#mission{text-align:right;font-size:12px;line-height:1.55;max-width:56%}#mission strong{color:#ead0a0}#toast{position:absolute;top:26%;left:50%;transform:translateX(-50%);background:#0d0d0de8;border:1px solid #bd9c60b4;padding:9px 14px;max-width:80%;text-align:center;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:4}#toast.show{opacity:1}#top{position:absolute;top:calc(env(safe-area-inset-top) + 84px);right:12px;display:flex;gap:6px;z-index:3}.tool{background:#0b0d10bf;border:1px solid #998e7277;color:var(--text);padding:10px;border-radius:4px;font-size:11px;min-height:36px}#controls{position:absolute;inset:0;pointer-events:none;z-index:2}#stick{position:absolute;bottom:calc(24px + env(safe-area-inset-bottom));left:20px;width:136px;height:136px;border:1px solid #dfd5b999;border-radius:50%;background:#0a0e13a6;display:grid;place-items:center;pointer-events:auto;touch-action:none}#stick:before,#stick:after{content:'';position:absolute;background:#b3ae9a55}#stick:before{width:1px;height:88px}#stick:after{width:88px;height:1px}#nub{width:53px;height:53px;border-radius:50%;background:#c1b6a99e;border:1px solid #ece4c9;box-shadow:0 0 12px #0008;transform:translate(0px,0px)}#btns{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));right:19px;display:flex;align-items:flex-end;gap:10px;pointer-events:auto}.action{width:76px;height:76px;border-radius:50%;border:1px solid #e1d5beab;background:#111318bd;color:#ede6d7;font-weight:bold;font-size:12px}.action:first-child{width:64px;height:64px}#use{font-size:14px}.action.active{background:#baa270;color:#161514}#touchHint{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 178px);right:15px;font-size:10px;color:#f2e8d4c9;text-shadow:1px 1px 4px #000;pointer-events:none}#overlay{position:absolute;z-index:5;top:50%;left:50%;transform:translate(-50%,-50%);width:min(88vw,450px);text-align:center;background:#050708ed;border:1px solid #aa9774;padding:23px 20px;box-shadow:0 0 0 100vmax #05050782,0 15px 55px #000b}#overlay h1{font-size:32px;letter-spacing:.22em;margin:0 0 6px}#overlay .sub{font-size:11px;color:var(--gold);letter-spacing:.12em}#overlay p{font-size:12px;line-height:1.65;color:#d2c8b9}#start{background:#d4bc8a;color:#161410;border:0;border-radius:2px;padding:14px 26px;font-weight:bold;font-size:14px;margin:9px}#overlay small{display:block;color:#ada08e;font-size:10px;line-height:1.6;margin-top:13px}#info{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap;opacity:.58;pointer-events:none}#musicFile{display:none}#fail{color:#f0b4a4;font-size:12px}#close{display:none}
+@media(orientation:portrait){#title{font-size:17px}#place{font-size:9px}#mission{font-size:10px;max-width:56%}#hud{padding:10px 11px}#top{top:calc(env(safe-area-inset-top) + 70px);right:9px}#stick{width:116px;height:116px;bottom:calc(20px + env(safe-area-inset-bottom));left:15px}#nub{width:47px;height:47px}#btns{right:10px;bottom:calc(24px + env(safe-area-inset-bottom));gap:6px}.action{width:69px;height:69px;font-size:11px}.action:first-child{width:58px;height:58px}#touchHint{bottom:calc(152px + env(safe-area-inset-bottom));font-size:10px}#overlay h1{font-size:26px}#info{display:none}}
+@media(orientation:landscape) and (max-height:470px){#title{font-size:16px}#place{font-size:8px}#mission{font-size:10px}#top{top:calc(55px + env(safe-area-inset-top))}#stick{width:100px;height:100px;bottom:12px}#nub{width:38px;height:38px}#btns{bottom:12px}.action{width:58px;height:58px}.action:first-child{width:50px;height:50px}#touchHint{bottom:115px}}
+@media(pointer:fine){#stick,#btns{opacity:.65}}
+</style>
+</head>
+<body>
+<div id="app"><canvas id="frame" aria-label="NOCTIS: Piazza del Gesù, scena cinematografica interattiva"></canvas><div id="scan"></div><div id="shade"></div>
+<div id="hud"><div><div id="title">NOCTIS</div><div id="place">NAPOLI / PIAZZA DEL GESÙ</div></div><div id="mission"><strong>01 / LA CHIAVE</strong><div id="objective">Esplora la piazza e trova la chiave</div></div></div>
+<div id="top"><button id="music" class="tool">♫ MUSICA</button><button id="reset" class="tool">↺</button><button id="full" class="tool">⛶</button><button id="pick" class="tool" title="Carica audio alternativo">MP3</button><input id="musicFile" type="file" accept="audio/*"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="controls"><div id="stick"><div id="nub"></div></div><div id="btns"><button id="run" class="action">CORRI</button><button id="use" class="action">AZIONE</button></div><div id="touchHint">CAMERA FISSA / MUOVITI CON IL JOYSTICK</div></div>
+<div id="overlay"><h1>NOCTIS</h1><div class="sub">NAPOLI / CINEMATIC TEST 0.8</div><p>Una prova giocabile con <b>fondale prerenderizzato</b>, personaggio separato e inquadratura fissa, come nei survival horror classici. Trova la chiave vicino alla guglia, poi apri il portone.</p><p>Lo scenario è una <b>ricostruzione artistica</b> della piazza, non una riproduzione metrica certificata.</p><button id="start">INIZIA IL TEST</button><small>TOUCH: joystick sinistro, CORRI, AZIONE · TASTIERA: WASD/frecce, Shift, E<br>Verticale e orizzontale. Musica originale integrata.</small><div id="fail"></div></div>
+<div id="info">EXSIDERURGICA · CINEMATIC 2.5D / PROTOTIPO</div><audio id="bgm" preload="none" loop></audio></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),canvas=$('frame'),ctx=canvas.getContext('2d',{alpha:false});
+const bg=new Image(),hero=new Image();bg.src='./piazza_del_gesu_camera_a.jpg';hero.src='./protagonista_overlay.png';
+let loaded=false,playing=false,finished=false,key=false,run=false,frame=0,prev=0,toastUntil=0;
+let error='';const imgs=[bg,hero];Promise.all(imgs.map(im=>im.decode())).then(()=>{loaded=true;}).catch(e=>{error='Immagini non caricate: '+e.message;$('fail').textContent=error;});
+const WORLD_W=960,WORLD_H=540;
+const player={x:265,y:503,dir:1};const keyPos={x:314,y:413},doorPos={x:562,y:389};
+const keys={};let joy={x:0,y:0},runTouch=false,worldZoom=1,now=0;
+function d(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function notify(msg,sec=2){$('toast').textContent=msg;$('toast').classList.add('show');toastUntil=performance.now()+sec*1000;}
+function resize(){const dpr=Math.min(2,window.devicePixelRatio||1);let w=innerWidth,h=innerHeight;canvas.width=Math.min(1800,Math.round(w*dpr));canvas.height=Math.min(1800,Math.round(h*dpr));canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.imageSmoothingEnabled=false;}
+addEventListener('resize',resize);resize();
+function screenTransform(){const vw=canvas.width,vh=canvas.height;const portrait=vh>vw*1.15;let scale=Math.max(vw/WORLD_W,vh/WORLD_H);scale*=worldZoom;
+// A cinematic crop follows the character in portrait; landscape uses the full establishing shot.
+let target=portrait?Math.max(265,Math.min(650,player.x+60)):WORLD_W/2;
+const ox=vw/2-target*scale,oy=vh-(WORLD_H*scale);
+return {scale,ox,oy,vw,vh,portrait};}
+function actorHeight(){return 210+(player.y-380)/160*105;}
+function drawActor(){const h=actorHeight();const ratio=hero.naturalWidth/hero.naturalHeight;const wid=h*ratio;
+const bob=Math.sin(now*8.5)*(Math.hypot(joy.x,joy.y)>.12||keys.w||keys.s||keys.a||keys.d?2.5:0);
+const facing=player.dir<0?-1:1;
+ctx.save();ctx.translate(player.x,player.y);ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(0,3,wid*.23,9,0,0,Math.PI*2);ctx.fill();
+ctx.translate(0,bob);ctx.scale(facing,1);
+// Foreground actor remains independent of the photographic/prerendered square.
+ctx.drawImage(hero,-wid*.57,-h+8,wid,h);
+ctx.restore();}
+function drawMarker(x,y,c,kind){ctx.save();let r=8+Math.sin(now*2.9)*2;ctx.strokeStyle=c;ctx.lineWidth=1.8;ctx.beginPath();ctx.ellipse(x,y-7,r,r*.44,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle=c;ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=4;ctx.fillText(kind,x,y-22);ctx.restore();}
+function render(){const t=screenTransform();const {scale,ox,oy,vw,vh}=t;ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#030405';ctx.fillRect(0,0,vw,vh);ctx.save();ctx.translate(ox,oy);ctx.scale(scale,scale);
+if(loaded){ctx.drawImage(bg,0,0,WORLD_W,WORLD_H);if(!key)drawMarker(keyPos.x,keyPos.y,'#e6cb77','CHIAVE');else drawMarker(doorPos.x,doorPos.y,'#b7e4b4','PORTONE');drawActor();}
+ctx.restore();}
+function collision(x,y){x=Math.min(810,Math.max(210,x));y=Math.min(520,Math.max(386,y));
+// Landmark pedestal blocks the hero's path; other buildings are baked into the background.
+if(x>292&&x<420&&y<425){if(player.y>=425)y=425;else x=player.x;}
+return {x,y};}
+function update(dt){let xx=(keys.d||keys.ArrowRight?1:0)-(keys.a||keys.ArrowLeft?1:0)+joy.x;
+let yy=(keys.s||keys.ArrowDown?1:0)-(keys.w||keys.ArrowUp?1:0)+joy.y;
+let len=Math.hypot(xx,yy);if(len>.12&&!finished){xx/=len;yy/=len;const speed= (runTouch||keys.Shift?140:84)*Math.min(1,len)*dt;const p=collision(player.x+xx*speed,player.y+yy*speed);player.x=p.x;player.y=p.y;if(Math.abs(xx)>.1)player.dir=xx<0?-1:1;}
+// Camera push-in is subtle and only when approaching the building.
+const dest=(player.x>510&&player.y<442)?1.13:1;worldZoom+=(dest-worldZoom)*Math.min(1,dt*2);
+}
+function action(){if(!playing||finished)return;
+if(!key&&d(player,keyPos)<95){key=true;$('mission').innerHTML='<strong>02 / IL PORTONE</strong><div id="objective">Apri il portone della chiesa</div>';notify('CHIAVE RACCOLTA');return;}
+if(d(player,doorPos)<100){if(!key){notify('IL PORTONE È CHIUSO');return;}finished=true;notify('PORTONE APERTO · FINE DEL TEST',4);setTimeout(()=>{$('overlay').style.display='block';$('overlay').querySelector('h1').textContent='CAPITOLO COMPLETATO';$('overlay').querySelector('p').textContent='Hai completato la prima prova cinematografica. Il fondale è prerenderizzato e il personaggio è una figura animata separata: non ancora un modello 3D completo.';$('start').textContent='RIGIOCA';$('start').onclick=()=>location.reload();},3200);return;}
+notify('NESSUNA INTERAZIONE VICINA',1.2);
+}
+function loop(ts){requestAnimationFrame(loop);const dt=Math.min(.05,(ts-prev)/1000||0);prev=ts;now=ts/1000;if(playing)update(dt);if(ts>toastUntil)$('toast').classList.remove('show');render();}
+requestAnimationFrame(loop);
+const stick=$('stick'),nub=$('nub');let pointerId=null;
+function moveStick(e){const box=stick.getBoundingClientRect(),cx=box.left+box.width/2,cy=box.top+box.height/2,rad=box.width*.34;let x=e.clientX-cx,y=e.clientY-cy,len=Math.hypot(x,y),k=Math.min(1,rad/(len||1));x*=k;y*=k;joy={x:x/rad,y:y/rad};nub.style.transform=`translate(${x}px,${y}px)`;}
+stick.addEventListener('pointerdown',e=>{e.preventDefault();pointerId=e.pointerId;stick.setPointerCapture(pointerId);moveStick(e)});
+stick.addEventListener('pointermove',e=>{if(pointerId===e.pointerId)moveStick(e)});
+for(const ev of ['pointerup','pointercancel','lostpointercapture'])stick.addEventListener(ev,e=>{if(pointerId!==e.pointerId)return;pointerId=null;joy={x:0,y:0};nub.style.transform='translate(0px,0px)'});
+$('run').addEventListener('pointerdown',e=>{e.preventDefault();runTouch=true;$('run').classList.add('active')});for(const ev of ['pointerup','pointercancel','pointerleave'])$('run').addEventListener(ev,()=>{runTouch=false;$('run').classList.remove('active')});$('use').addEventListener('pointerdown',e=>{e.preventDefault();action()});
+addEventListener('keydown',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;keys[k]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(k))e.preventDefault();if((k==='e'||k===' ')&&!e.repeat)action();});addEventListener('keyup',e=>keys[e.key.length===1?e.key.toLowerCase():e.key]=false);
+const audio=$('bgm');audio.volume=.55;let trackURL=null,ready=false,manual=false,loading=false;
+function setAudio(blob){if(trackURL)URL.revokeObjectURL(trackURL);trackURL=URL.createObjectURL(blob);audio.src=trackURL;ready=true;audio.load();$('music').textContent='♫ MUSICA';}
+async function loadTrack(){if(loading)return;loading=true;$('music').textContent='♫ CARICA';try{const pieces=await Promise.all(Array.from({length:6},(_,i)=>fetch('../music/p'+i+'.bin').then(r=>{if(!r.ok)throw Error('traccia '+i+' HTTP '+r.status);return r.arrayBuffer();})));const blob=new Blob(pieces,{type:'audio/ogg'});if(blob.size!==1523969)throw Error('dimensione audio '+blob.size);if(!manual)setAudio(blob);return true;}catch(err){notify('MUSICA NON DISPONIBILE: '+String(err.message).slice(0,40),4);$('music').textContent='♫ AUDIO';return false;}}
+const audioFetch=loadTrack();
+function playTrack(){if(ready){audio.play().then(()=>$('music').textContent='Ⅱ PAUSA').catch(()=>notify('TOCCA ♫ MUSICA PER ATTIVARE',3));}else{audioFetch.then(ok=>{if(ok&&playing)playTrack()});}}
+$('music').addEventListener('click',()=>{if(audio.paused)playTrack();else{audio.pause();$('music').textContent='♫ MUSICA';}});
+$('pick').addEventListener('click',()=>$('musicFile').click());$('musicFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;manual=true;setAudio(f);playTrack();});
+$('start').addEventListener('click',()=>{if(!loaded){$('fail').textContent=error||'Attendi il caricamento delle immagini...';return;}$('overlay').style.display='none';playing=true;playTrack();});
+$('reset').addEventListener('click',()=>{player.x=265;player.y=503;player.dir=1;notify('POSIZIONE RIPRISTINATA')});
+$('full').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else $('app').requestFullscreen?.().catch(()=>{});});
+addEventListener('blur',()=>{joy={x:0,y:0};runTouch=false;for(const k in keys)delete keys[k]});
+addEventListener('pagehide',()=>{audio.pause();if(trackURL)URL.revokeObjectURL(trackURL)});
+})();
+</script>
+</body></html>
