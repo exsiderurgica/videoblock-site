@@ -19,6 +19,7 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install --disable-pip-version-check pillow requests
       - name: Download and transform CC BY-SA photographs
+        if: hashFiles('noctis/photos/gesu_facade_reference.jpg') == ''
         run: python noctis/photo-pipeline/fetch_licensed_photos.py
       - name: Download OpenStreetMap building footprints and streets
         run: python noctis/photo-pipeline/fetch_osm.py
