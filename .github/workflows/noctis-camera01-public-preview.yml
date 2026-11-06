@@ -1,0 +1,62 @@
+name: NOCTIS Camera 01 - prova link pubblico
+on:
+  push:
+    branches: [noctis/camera01-verifica-20261106]
+    paths: ['.github/workflows/noctis-camera01-public-preview.yml']
+permissions:
+  contents: read
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Installa browser
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Apri link esterno effettivo, carica modelli e controlla prima schermata
+        run: |
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          import json, pathlib
+          base='https://rawcdn.githack.com/exsiderurgica/videoblock-site/d28f272cf5825cce57daa71a58017e3cdcdcc1b1/noctis/re1-camera01/'
+          p=pathlib.Path('/tmp/noctis-public')
+          p.mkdir(parents=True,exist_ok=True)
+          with sync_playwright() as pw:
+            browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+            context=browser.new_context(viewport={'width':393,'height':852},has_touch=True,is_mobile=True)
+            page=context.new_page()
+            errs=[]
+            page.on('pageerror',lambda e:errs.append(str(e)))
+            resp=page.goto(base+'index.html',wait_until='domcontentloaded',timeout=45000)
+            print('HTTP',resp.status if resp else 'NONE',flush=True)
+            print('LANDING',page.url,flush=True)
+            print('TITLE',page.title(),flush=True)
+            print('INITIAL_TEXT',page.locator('body').inner_text()[:500].replace(chr(10),' '),flush=True)
+            page.screenshot(path=str(p/'inizio.png'))
+            try:
+              page.wait_for_function("() => document.getElementById('start') && (!document.getElementById('start').disabled || document.getElementById('start').textContent.includes('ERRORE'))",timeout=70000)
+            except Exception:
+              print('NOT_READY',page.locator('body').inner_text()[:750],flush=True)
+              raise
+            state=page.evaluate("""() => ({ready:!document.getElementById('start').disabled,hero:window.__heroOk===true,zombie:window.__zomOk===true,text:document.getElementById('start').textContent,depth:window.__noctis?.probe?.().depthOccluders})""")
+            print('STATUS',json.dumps(state,ensure_ascii=False),flush=True)
+            page.locator('#start').click()
+            page.wait_for_timeout(350)
+            page.screenshot(path=str(p/'gioco.png'))
+            print('ERRORS',json.dumps(errs),flush=True)
+            assert state['ready'] and state['hero'] and state['zombie'] and state['depth']==8, state
+            assert not errs, errs
+            browser.close()
+          PY
+      - name: Conserva screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noctis-link-pubblico
+          path: /tmp/noctis-public/
+          if-no-files-found: warn
