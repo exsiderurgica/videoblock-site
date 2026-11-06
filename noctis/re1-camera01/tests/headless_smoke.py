@@ -37,28 +37,45 @@ def check(page, name):
         raise AssertionError("Caricamento non completato: " + json.dumps(status, ensure_ascii=False))
     if not status["heroOK"] or not status["zombieOK"] or not status["modelIsPhoto"]:
         raise AssertionError("Modelli o animazioni non pronti: " + str(status))
-    # Verifica geometrica della prospettiva: gli 8 occlusori devono
-    # essere proiettati precisamente sulle aree ritagliate dallo sfondo.
+    # Le maschere devono usare solo triangoli ritagliati, mai rettangoli
+    # trasparenti con alphaTest (provocavano grossi buchi neri su Android).
     projection=page.evaluate("""() => {
-      const e=foregroundMeshes.map((mesh,i)=>{
-        const poly=MASKS[i].poly,xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]);
-        const x0=Math.floor(Math.min(...xs))-2,y0=Math.floor(Math.min(...ys))-2;
-        const x1=Math.ceil(Math.max(...xs))+2,y1=Math.ceil(Math.max(...ys))+2;
-        const q=mesh.position.clone().project(cam);
-        return {i,u:(q.x+1)*IW/2,v:(1-q.y)*IH/2,ex:(x0+x1)/2,ey:(y0+y1)/2,
-          w:mesh.geometry.parameters.width*CAL.f/(-mesh.position.z),
-          h:mesh.geometry.parameters.height*CAL.f/(-mesh.position.z),
-          ew:x1-x0,eh:y1-y0,depth:-mesh.position.z}
+      const entries=foregroundMeshes.map((mesh,i)=>{
+        const original=MASKS[i].poly,arr=mesh.geometry.getAttribute('position');
+        const texture=mesh.material.map;
+        let maxDeviation=0,triArea=0;
+        const verts=[];
+        for(let j=0;j<arr.count;j++){
+          const q=new THREE.Vector3().fromBufferAttribute(arr,j).project(cam);
+          const uv=[(q.x+1)*IW/2,(1-q.y)*IH/2];
+          verts.push(uv);
+          maxDeviation=Math.max(maxDeviation,Math.min(...original.map(p=>Math.hypot(p[0]-uv[0],p[1]-uv[1]))));
+        }
+        for(let j=0;j<verts.length;j+=3){
+          const [a,b,c]=verts.slice(j,j+3);
+          triArea+=Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]))/2;
+        }
+        const polygonArea=Math.abs(original.reduce((sum,p,j)=>{
+          const n=original[(j+1)%original.length];
+          return sum+p[0]*n[1]-n[0]*p[1];
+        },0))/2;
+        return {count:arr.count,maxDeviation,relativeAreaError:Math.abs(triArea-polygonArea)/polygonArea,
+          noRectangles:mesh.geometry.type==='BufferGeometry'&&!mesh.geometry.index,
+          noAlpha:!mesh.material.transparent&&mesh.material.alphaTest===0,
+          sharedTexture: texture===foregroundMeshes[0].material.map,
+          imageTexture:!!texture?.image&&!texture.isCanvasTexture}
       });
-      return {meshes:e,legacyMasks:document.getElementById('masks').children.length}
+      return {entries,legacyMasks:document.getElementById('masks').children.length,
+        mode:window.__noctis.probe().occlusionMode}
     }""")
-    if len(projection["meshes"]) != 8 or projection["legacyMasks"]:
-        raise AssertionError("Occlusori profondita' mancanti o maschere CSS legacy: "+str(projection))
-    for m in projection["meshes"]:
-        if max(abs(m["u"]-m["ex"]),abs(m["v"]-m["ey"]),
-               abs(m["w"]-m["ew"]),abs(m["h"]-m["eh"])) > .05:
-            raise AssertionError("Occlusore non allineato ai pixel del render: "+str(m))
-    print("Occlusori 3D allineati al render: 8/8",flush=True)
+    if len(projection["entries"]) != 8 or projection["legacyMasks"] or projection["mode"] != "polygon":
+        raise AssertionError("Sagome 3D mancanti o legacy ancora attivo: "+str(projection))
+    for item in projection["entries"]:
+        if (item["count"] < 3 or not item["noRectangles"] or not item["noAlpha"]
+            or not item["sharedTexture"] or not item["imageTexture"]
+            or item["maxDeviation"] > .2 or item["relativeAreaError"] > .015):
+            raise AssertionError("Sagoma fuori scala o con rettangoli/trasparenza: "+str(item))
+    print("Otto sagome 3D reali, senza rettangoli alpha, allineate: 8/8",flush=True)
     page.locator("#start").click()
     page.wait_for_timeout(800)
     state0 = page.evaluate("window.__noctis.probe()")
