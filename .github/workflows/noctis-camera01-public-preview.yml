@@ -37,6 +37,10 @@ jobs:
             print('LANDING',page.url,flush=True)
             print('TITLE',page.title(),flush=True)
             print('INITIAL_TEXT',page.locator('body').inner_text()[:500].replace(chr(10),' '),flush=True)
+            if 'External Content Notice' in page.title():
+              page.get_by_text('Open the page',exact=True).click(timeout=15000)
+              page.wait_for_timeout(600)
+              print('AFTER_CONFIRM',page.url,page.title(),flush=True)
             page.screenshot(path=str(p/'inizio.png'))
             try:
               page.wait_for_function("() => document.getElementById('start') && (!document.getElementById('start').disabled || document.getElementById('start').textContent.includes('ERRORE'))",timeout=70000)
