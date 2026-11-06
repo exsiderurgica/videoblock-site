@@ -21,7 +21,11 @@ jobs:
       - name: Installa Chromium e Playwright
         run: |
           python -m pip install playwright
-          python -m playwright install --with-deps chromium
+          if command -v google-chrome >/dev/null 2>&1 || command -v chromium >/dev/null 2>&1; then
+            echo "Uso il browser Chrome gia' presente sul runner"
+          else
+            python -m playwright install --with-deps chromium
+          fi
       - name: Verifica Camera 01 su desktop e Android
         run: |
           python -m http.server 8123 --bind 127.0.0.1 > /tmp/noctis-server.log 2>&1 &
