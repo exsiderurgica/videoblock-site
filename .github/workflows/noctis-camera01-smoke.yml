@@ -2,7 +2,7 @@ name: NOCTIS Camera 01 - verifica browser reale
 on:
   push:
     branches:
-      - noctis/camera01-verifica-20261106
+      - noctis/pulcinella-zombie-walk-test-20261106
     paths:
       - ".github/workflows/noctis-camera01-smoke.yml"
       - "noctis/re1-camera01/**"

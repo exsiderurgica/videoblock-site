@@ -91,7 +91,24 @@ def check(page, name):
         raise AssertionError("Gli ostacoli disegnano ancora pixel nel WebGL: "+str(projection["samples"]))
     print("Otto occlusori di sola profondita', alpha 0: 8/8",flush=True)
     page.locator("#start").click()
-    page.wait_for_timeout(800)
+    page.wait_for_timeout(1000)
+    zombie = page.evaluate("""() => ({
+      loaded: !!ZOM.H?.src,
+      bones: Object.keys(ZOM.H?.bn || {}).length,
+      spinePitch: ZOM.H?.bn.spine_01?.rotation.x,
+      headPitch: ZOM.H?.bn.head?.rotation.x,
+      speed: ZOM.speed,
+      pos: [ZOM.x,ZOM.z]
+    })""")
+    if not zombie["loaded"] or zombie["bones"] < 15:
+        raise AssertionError("Pulcinella non ha lo scheletro o la clip caricata: "+str(zombie))
+    if zombie["spinePitch"] is None or abs(zombie["spinePitch"]) < .09:
+        raise AssertionError("Postura zombie non applicata alla colonna: "+str(zombie))
+    if zombie["headPitch"] is None:
+        raise AssertionError("Testa zombie non animata: "+str(zombie))
+    if zombie["speed"] > .50:
+        raise AssertionError("Pulcinella si muove troppo velocemente: "+str(zombie))
+    print("Pulcinella: clip caricata, scheletro presente, postura inclinata e velocita' ridotta",zombie,flush=True)
     state0 = page.evaluate("window.__noctis.probe()")
     page.screenshot(path=str(OUT / (name + "-inizio.png")), full_page=True)
     if name == "desktop":
