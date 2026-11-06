@@ -2,7 +2,7 @@
 """NOCTIS Camera 01: reale browser WebGL, pickup, orientamento, tre colpi e persistenza del corpo."""
 from pathlib import Path
 from playwright.sync_api import sync_playwright
-import json, math
+import json, math, shutil
 
 URL="http://127.0.0.1:8123/noctis/re1-camera01/index.html"
 OUT=Path("noctis/re1-camera01/test-renders")
@@ -95,7 +95,7 @@ def test(page,label):
     results[label]={"passed":True,"hits":final["hits"],"parts":final["severed"],"persistent":full["corpseInScene"],"errors":errors}
 
 with sync_playwright() as pw:
-    browser=pw.chromium.launch(headless=True,args=[
+    browser=pw.chromium.launch(headless=True,executable_path=shutil.which('google-chrome') or shutil.which('chromium') or None,args=[
       "--no-sandbox","--disable-dev-shm-usage","--use-gl=angle","--use-angle=swiftshader",
       "--enable-webgl","--enable-unsafe-swiftshader","--ignore-gpu-blocklist"])
     try:
