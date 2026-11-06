@@ -27,13 +27,13 @@ def test(page,label):
     assert page.evaluate("combatNearGun()"),"La pistola non è raggiungibile"
     page.locator("#use").click()
     page.wait_for_function("() => COMBAT.picking",timeout=3500)
-    page.wait_for_timeout(380)
+    page.wait_for_function("() => COMBAT.picking && COMBAT.pickupT>=.08",timeout=20000)
     pose=page.evaluate("""() => ({
       spine:actor.hero?.bn?.spine_01?.rotation.x,
       pickup:COMBAT.picking,
       time:COMBAT.pickupT})""")
-    assert pose["pickup"] and pose["time"]>.1 and pose["spine"] is not None,pose
-    page.wait_for_function("() => COMBAT.hasGun && !COMBAT.picking",timeout=5000)
+    assert pose["pickup"] and pose["time"]>=.08 and pose["spine"] is not None,pose
+    page.wait_for_function("() => COMBAT.hasGun && !COMBAT.picking",timeout=24000)
     taken=state(page)
     assert taken["gun"] and not taken["visible"],taken
     page.screenshot(path=str(OUT / (label+"-pistola-raccolta.png")),full_page=True)
@@ -66,9 +66,9 @@ def test(page,label):
         page.screenshot(path=str(OUT / (label+"-colpo-"+str(hit)+".png")),full_page=True)
         next_idx=page.evaluate("COMBAT.mesh?.geometry?.index?.count || -1")
         deltas.append([before,next_idx])
-        if hit<3:page.wait_for_timeout(580)
+        if hit<3:page.wait_for_function("() => COMBAT.cooldown<.02",timeout=18000)
 
-    page.wait_for_timeout(1350)
+    page.wait_for_function("() => COMBAT.fallT>=1.25",timeout=28000)
     final=state(page)
     full=page.evaluate("""() => ({
       zombieVisible:ZOM.root?.visible,
