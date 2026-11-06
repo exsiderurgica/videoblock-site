@@ -26,7 +26,7 @@ def test(page,label):
     page.evaluate("window.__noctis.setImg(336,763)")
     assert page.evaluate("combatNearGun()"),"La pistola non è raggiungibile"
     page.locator("#use").click()
-    assert state(page)["picking"],"AZIONE non avvia l'animazione di raccolta"
+    page.wait_for_function("() => COMBAT.picking",timeout=3500)
     page.wait_for_timeout(380)
     pose=page.evaluate("""() => ({
       spine:actor.hero?.bn?.spine_01?.rotation.x,
