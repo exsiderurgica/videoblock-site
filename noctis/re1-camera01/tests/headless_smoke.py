@@ -37,12 +37,11 @@ def check(page, name):
         raise AssertionError("Caricamento non completato: " + json.dumps(status, ensure_ascii=False))
     if not status["heroOK"] or not status["zombieOK"] or not status["modelIsPhoto"]:
         raise AssertionError("Modelli o animazioni non pronti: " + str(status))
-    # Le maschere devono usare solo triangoli ritagliati, mai rettangoli
-    # trasparenti con alphaTest (provocavano grossi buchi neri su Android).
+    # I poligoni non devono produrre alcun pixel visibile:
+    # solo profondita', con i personaggi occlusi quando sono dietro.
     projection=page.evaluate("""() => {
       const entries=foregroundMeshes.map((mesh,i)=>{
         const original=MASKS[i].poly,arr=mesh.geometry.getAttribute('position');
-        const texture=mesh.material.map;
         let maxDeviation=0,triArea=0;
         const verts=[];
         for(let j=0;j<arr.count;j++){
@@ -60,22 +59,37 @@ def check(page, name):
           return sum+p[0]*n[1]-n[0]*p[1];
         },0))/2;
         return {count:arr.count,maxDeviation,relativeAreaError:Math.abs(triArea-polygonArea)/polygonArea,
-          noRectangles:mesh.geometry.type==='BufferGeometry'&&!mesh.geometry.index,
-          noAlpha:!mesh.material.transparent&&mesh.material.alphaTest===0,
-          sharedTexture: texture===foregroundMeshes[0].material.map,
-          imageTexture:!!texture?.image&&!texture.isCanvasTexture}
+          depthOnly:mesh.material.colorWrite===false && mesh.material.depthWrite===true &&
+                    mesh.material.depthTest===true && mesh.material.map===null,
+          orderedFirst:mesh.renderOrder<0}
       });
-      return {entries,legacyMasks:document.getElementById('masks').children.length,
+      const wasHero=actor.root.visible,wasZombie=ZOM.root?.visible;
+      actor.root.visible=false;if(ZOM.root)ZOM.root.visible=false;
+      R.render(scene,cam);
+      const gl=R.getContext(),d=R.getDrawingBufferSize(new THREE.Vector2()),pixel=new Uint8Array(4),samples=[];
+      MASKS.forEach((mask,i)=>{
+        const t=THREE.ShapeUtils.triangulateShape(mask.poly.map(p=>new THREE.Vector2(...p)),[])[0];
+        const u=t.reduce((sum,j)=>sum+mask.poly[j][0],0)/3,
+              v=t.reduce((sum,j)=>sum+mask.poly[j][1],0)/3;
+        gl.readPixels(Math.max(0,Math.min(d.x-1,Math.round(u*d.x/IW))),
+                      Math.max(0,Math.min(d.y-1,Math.round((IH-v)*d.y/IH))),
+                      1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+        samples.push({i,alpha:pixel[3],rgb:[pixel[0],pixel[1],pixel[2]]})
+      });
+      actor.root.visible=wasHero;if(ZOM.root)ZOM.root.visible=wasZombie;
+      R.render(scene,cam);
+      return {entries,samples,legacyMasks:document.getElementById('masks').children.length,
         mode:window.__noctis.probe().occlusionMode}
     }""")
-    if len(projection["entries"]) != 8 or projection["legacyMasks"] or projection["mode"] != "polygon":
-        raise AssertionError("Sagome 3D mancanti o legacy ancora attivo: "+str(projection))
-    for item in projection["entries"]:
-        if (item["count"] < 3 or not item["noRectangles"] or not item["noAlpha"]
-            or not item["sharedTexture"] or not item["imageTexture"]
-            or item["maxDeviation"] > .2 or item["relativeAreaError"] > .015):
-            raise AssertionError("Sagoma fuori scala o con rettangoli/trasparenza: "+str(item))
-    print("Otto sagome 3D reali, senza rettangoli alpha, allineate: 8/8",flush=True)
+    if len(projection["entries"]) != 8 or projection["legacyMasks"] or projection["mode"] != "depth-only":
+        raise AssertionError("Sagome di sola profondita' mancanti: "+str(projection))
+    for m in projection["entries"]:
+        if (m["count"] < 3 or not m["depthOnly"] or not m["orderedFirst"]
+            or m["maxDeviation"] > .2 or m["relativeAreaError"] > .015):
+            raise AssertionError("Occlusore non invisibile o prospettiva errata: "+str(m))
+    if any(p["alpha"] != 0 for p in projection["samples"]):
+        raise AssertionError("Gli ostacoli disegnano ancora pixel nel WebGL: "+str(projection["samples"]))
+    print("Otto occlusori di sola profondita', alpha 0: 8/8",flush=True)
     page.locator("#start").click()
     page.wait_for_timeout(800)
     state0 = page.evaluate("window.__noctis.probe()")

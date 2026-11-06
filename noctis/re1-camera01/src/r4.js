@@ -50,10 +50,10 @@ function update(dt){
    di un solo personaggio, ogni superficie scrive nel depth buffer: protagonista e
    Pulcinella possono passare davanti/dietro alla stessa guglia o agli stessi paletti. */
 const foregroundMeshes=[];
-function foregroundFromMask(poly,base,texture){
-  // Maschera come vera geometria ritagliata: nessun quad trasparente.
-  // Su alcuni browser Android i bordi trasparenti di una CanvasTexture
-  // vengono riprodotti come rettangoli neri, coprendo la piazza.
+function foregroundFromMask(poly,base){
+  // Lo sfondo fotografico contiene gia' guglia e paletti.
+  // Queste sagome scrivono SOLO nel depth buffer, senza alterare colore o alpha:
+  // i personaggi dietro vengono nascosti, ma non appare alcun poligono nero.
   const depth=CAL.f*CAL.ch/(base-CAL.cy),px=depth/CAL.f;
   const points=poly.map(([u,v])=>new THREE.Vector2(u,v));
   const triangles=THREE.ShapeUtils.triangulateShape(points,[]);
@@ -61,18 +61,18 @@ function foregroundFromMask(poly,base,texture){
     console.error('NOCTIS: maschera non triangolata',triangles.length,points.length);
     return false;
   }
-  const positions=[],uvs=[];
+  const positions=[];
   triangles.forEach(tri=>tri.forEach(i=>{
     const u=poly[i][0],v=poly[i][1];
     positions.push((u-CAL.cx)*px,CAL.ch+(CAL.cy-v)*px,-depth);
-    uvs.push(u/IW,1-v/IH);
   }));
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
-  geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
-  const material=new THREE.MeshBasicMaterial({map:texture,transparent:false,
+  const material=new THREE.MeshBasicMaterial({color:0xffffff,colorWrite:false,
     depthTest:true,depthWrite:true,side:THREE.DoubleSide,fog:false,toneMapped:false});
   const mesh=new THREE.Mesh(geometry,material);
+  // Va disegnato PRIMA dei personaggi: altrimenti la profondita' non li copre.
+  mesh.renderOrder=-100;
   mesh.frustumCulled=false;
   scene.add(mesh);foregroundMeshes.push(mesh);
   return true;
@@ -111,14 +111,9 @@ function boot(){
   buildZombie(ok=>{window.__zomOk=ok;assetStatus('zombie',ok)});
   const img=new Image();img.onload=()=>{
     $('bg').getContext('2d').drawImage(img,0,0);
-    // Un'unica texture condivisa, sagome triangolate opache al posto dei
-    // rettangoli con alphaTest (bug visibile sui browser Android reali).
-    const texture=new THREE.Texture(img);
-    texture.encoding=THREE.sRGBEncoding;
-    texture.magFilter=THREE.LinearFilter;
-    texture.minFilter=THREE.LinearFilter;
-    texture.needsUpdate=true;
-    const cutoutsOK=MASKS.every(m=>foregroundFromMask(m.poly,m.base,texture));
+    // Lo sfondo e' disegnato solo sul canvas 2D. Le sagome sono invisibili
+    // e servono esclusivamente come test di profondita' nel canvas WebGL.
+    const cutoutsOK=MASKS.every(m=>foregroundFromMask(m.poly,m.base));
     if(!cutoutsOK){assetStatus('bg',false);return}
     assetStatus('bg',true);render()};
   img.onerror=()=>assetStatus('bg',false);img.src='bg.jpg';
@@ -128,7 +123,7 @@ function boot(){
   $('aud').addEventListener('click',()=>{const on=audioToggle();$('aud').textContent=on?'♪ AUDIO':'♪ MUTO'});$('dbgb').addEventListener('click',()=>{dbgOn=!dbgOn;$('dbg').hidden=!dbgOn;if(dbgOn)drawDebug()});
   (function loop(now){requestAnimationFrame(loop);if(!running)return;const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);render();pan();if(dbgOn)drawDebug()})(performance.now());
 }
-window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),depthOccluders:foregroundMeshes.length,occlusionMode:'polygon'}),
+window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),depthOccluders:foregroundMeshes.length,occlusionMode:'depth-only'}),
   setImg:(u,v,yaw=actor.yaw)=>{const g=img2g(u,v);actor.x=g[0];actor.z=g[1];actor.yaw=yaw;actor.speed=0;resolve({x:actor.x,z:actor.z});update(.016);render();return window.__noctis.probe()},
   step:(n,f,t,run)=>{for(let i=0;i<n;i++){inp.keys={KeyW:f>0,KeyS:f<0,KeyA:t<0,KeyD:t>0,ShiftLeft:!!run};update(1/60)}inp.keys={};render();return window.__noctis.probe()},
   use:()=>{inp.use=true;update(.016)},start:()=>{if($('start').disabled)return false;$('intro').style.display='none';running=true;last=performance.now()},debug:(on)=>{dbgOn=on;$('dbg').hidden=!on;if(on)drawDebug()}};
