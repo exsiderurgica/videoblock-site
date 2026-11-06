@@ -51,7 +51,14 @@ def test(page,label):
           actor.yaw=Math.atan2(ZOM.x-actor.x,-(ZOM.z-actor.z));
           actor.root.rotation.y=-actor.yaw;
         }""")
-        assert page.evaluate("combatAim()"),"Orientamento non valido con protagonista verso lo zombie"
+        aim=page.evaluate("""() => {
+          const dx=ZOM.x-actor.x,dz=ZOM.z-actor.z,dist=Math.hypot(dx,dz);
+          return {aim:combatAim(),dx,dz,dist,yaw:actor.yaw,actorX:actor.x,actorZ:actor.z,
+            zombieX:ZOM.x,zombieZ:ZOM.z,root:!!ZOM.root,dead:!!ZOM.dead,
+            facing:(Math.sin(actor.yaw)*dx-Math.cos(actor.yaw)*dz)/(dist||1)}
+        }""")
+        print("DIAGNOSTICA MIRA",label,hit,json.dumps(aim),flush=True)
+        assert aim["aim"],"Orientamento non valido con protagonista verso lo zombie: "+str(aim)
         before=page.evaluate("COMBAT.mesh?.geometry?.index?.count || -1")
         page.locator("#use").click()
         page.wait_for_function("(hits) => COMBAT.hits >= hits",arg=hit,timeout=4000)
