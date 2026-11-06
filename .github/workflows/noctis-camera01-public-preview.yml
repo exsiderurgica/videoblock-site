@@ -1,7 +1,7 @@
 name: NOCTIS Camera 01 - prova link pubblico
 on:
   push:
-    branches: [noctis/camera01-verifica-20261106]
+    branches: [noctis/pulcinella-zombie-walk-test-20261106]
     paths: ['.github/workflows/noctis-camera01-public-preview.yml']
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
           python - <<'PY'
           from playwright.sync_api import sync_playwright
           import json, pathlib
-          base='https://rawcdn.githack.com/exsiderurgica/videoblock-site/d28f272cf5825cce57daa71a58017e3cdcdcc1b1/noctis/re1-camera01/'
+          base='https://rawcdn.githack.com/exsiderurgica/videoblock-site/aa49dd26bc167fbc3921a9578772436a10ca19f0/noctis/re1-camera01/'
           p=pathlib.Path('/tmp/noctis-public')
           p.mkdir(parents=True,exist_ok=True)
           with sync_playwright() as pw:
@@ -54,6 +54,7 @@ jobs:
             page.screenshot(path=str(p/'gioco.png'))
             print('ERRORS',json.dumps(errs),flush=True)
             assert state['ready'] and state['hero'] and state['zombie'] and state['depth']==8, state
+            assert page.evaluate("window.__noctis.probe().occlusionMode") == 'depth-only'
             assert not errs, errs
             browser.close()
           PY
