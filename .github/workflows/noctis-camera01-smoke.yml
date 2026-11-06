@@ -11,7 +11,7 @@ permissions:
   contents: read
 jobs:
   browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
           from PIL import Image
           from pathlib import Path
           directory=Path("noctis/re1-camera01/test-renders")
-          for name in ["desktop-inizio", "desktop-movimento", "desktop-paletti-dietro", "desktop-paletti-davanti", "android-inizio", "android-movimento"]:
+          for name in ["desktop-inizio", "desktop-movimento", "desktop-paletti-dietro", "desktop-paletti-davanti", "android-inizio", "android-movimento", "desktop-pistola-terra", "desktop-pistola-raccolta", "desktop-colpo-1", "desktop-colpo-2", "desktop-colpo-3", "desktop-cadavere", "android-cadavere"]:
               path=directory/(name+".png")
               if not path.exists():
                   print("SCREENSHOT_MISSING",name)
