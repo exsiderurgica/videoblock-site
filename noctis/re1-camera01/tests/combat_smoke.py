@@ -55,7 +55,7 @@ def test(page,label):
           const dx=ZOM.x-actor.x,dz=ZOM.z-actor.z,dist=Math.hypot(dx,dz);
           return {aim:combatAim(),dx,dz,dist,yaw:actor.yaw,actorX:actor.x,actorZ:actor.z,
             zombieX:ZOM.x,zombieZ:ZOM.z,root:!!ZOM.root,dead:!!ZOM.dead,
-            facing:(Math.sin(actor.yaw)*dx-Math.cos(actor.yaw)*dz)/(dist||1)}
+            facing:(Math.sin(actor.yaw)*dx-Math.cos(actor.yaw)*dz)/(dist||1),forwardOK:Math.sin(actor.yaw)*dx-Math.cos(actor.yaw)*dz>=.75*dist,actualCode:combatAim.toString().slice(0,500)}
         }""")
         print("DIAGNOSTICA MIRA",label,hit,json.dumps(aim),flush=True)
         assert aim["aim"],"Orientamento non valido con protagonista verso lo zombie: "+str(aim)

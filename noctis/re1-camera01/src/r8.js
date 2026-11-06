@@ -98,8 +98,10 @@ function combatAction(){
 function combatAim(){
   if(!ZOM.root||ZOM.dead)return false;
   const dx=ZOM.x-actor.x,dz=ZOM.z-actor.z,dist=Math.hypot(dx,dz);
-  return dist<17 && dist>.15 &&
-    (Math.sin(actor.yaw)*dx-Math.cos(actor.y)*dz)/dist>Math.cos(.70);
+  if(!Number.isFinite(dist)||dist<=.15)return false;
+  // Solo direzione: nessuna distanza massima nascosta.
+  const forwardX=Math.sin(actor.yaw),forwardZ=-Math.cos(actor.yaw);
+  return Number.isFinite(forwardX) && forwardX*dx+forwardZ*dz>=.75*dist;
 }
 function combatPrepareMesh(){
   if(COMBAT.faces)return !!COMBAT.mesh;
