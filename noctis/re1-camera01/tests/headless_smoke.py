@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Test reale in Chromium: una sola Camera 01, su desktop e Android emulato."""
 import json
+import shutil
 import os
 import base64
 from pathlib import Path
@@ -156,7 +157,7 @@ def check(page, name):
     return result
 
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch(headless=True,args=[
+    browser = playwright.chromium.launch(headless=True,executable_path=shutil.which('google-chrome') or shutil.which('chromium') or None,args=[
         "--no-sandbox","--disable-dev-shm-usage","--use-gl=angle","--use-angle=swiftshader",
         "--enable-webgl","--enable-unsafe-swiftshader","--ignore-gpu-blocklist"
     ])
