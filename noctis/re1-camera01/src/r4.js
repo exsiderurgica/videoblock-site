@@ -26,7 +26,7 @@ const se=e=>{if(e.pointerId===sp){sp=null;sv.x=sv.y=0;knob.style.transform=''}};
 const rb=$('run');rb.addEventListener('pointerdown',e=>{runHold=true;rb.classList.add('on');rb.setPointerCapture(e.pointerId)});['pointerup','pointercancel'].forEach(t=>rb.addEventListener(t,()=>{runHold=false;rb.classList.remove('on')}));
 $('use').addEventListener('pointerdown',()=>{inp.use=true});
 function nearSpot(){let best=null,bd=1e9;for(const s of SPOTS){const d=Math.hypot(s.x-actor.x,s.z-actor.z);if(d<s.r&&d<bd){bd=d;best=s}}return best}
-function useSpot(){const s=nearSpot();if(!s){say('Niente da fare qui.',1400);return}
+function useSpot(){if(combatAction())return;const s=nearSpot();if(!s){say('Niente da fare qui.',1400);return}
   if(s.id==='guglia'){state.g=true;say('La base è bagnata e annerita. In alto, la Madonna dorata guarda un punto della piazza che da qui non vedi.',4800)}
   else if(s.id==='portal'){state.p=true;say('Il portone è chiuso dall’interno. Dietro i battenti, un rumore come di catene.',4600)}
   else say('Il lampione è spento. Il vetro è pieno di insetti morti.',3800);
@@ -34,14 +34,17 @@ function useSpot(){const s=nearSpot();if(!s){say('Niente da fare qui.',1400);ret
 function update(dt){
   const k=inp.keys;let f=(k.KeyW||k.ArrowUp?1:0)-(k.KeyS||k.ArrowDown?1:0),t=(k.KeyD||k.ArrowRight?1:0)-(k.KeyA||k.ArrowLeft?1:0);
   if(Math.abs(sv.x)>.18||Math.abs(sv.y)>.18){f=-sv.y;t=sv.x;if(Math.abs(f)<.25)f=0;if(Math.abs(t)<.25)t=0}
+  if(COMBAT.picking){f=0;t=0}
   const run=!!(k.ShiftLeft||k.ShiftRight||runHold);
   const target=f>0?(run?RUN:WALK*Math.min(1,f)):f<0?-1.0:0,acc=Math.abs(target)>Math.abs(actor.speed)?6.5:11;actor.speed+=cl(target-actor.speed,-acc*dt,acc*dt);
   const tr=(run&&f>0?3.0:2.2)*t;actor.turn+=(tr-actor.turn)*Math.min(1,dt*12);actor.yaw+=actor.turn*dt;
   const prev={x:actor.x,z:actor.z};actor.x+=Math.sin(actor.yaw)*actor.speed*dt;actor.z+=-Math.cos(actor.yaw)*actor.speed*dt;
   if(resolve(prev)){const mv=Math.hypot(actor.x-prev.x,actor.z-prev.z)/Math.max(dt,1e-4);actor.speed=Math.sign(actor.speed)*Math.min(Math.abs(actor.speed),mv+.2)}
   (actor.hero?heroAnim:poseActor)(dt,Math.abs(actor.speed),actor.turn,actor.speed<-.05);
+  combatPose(dt);
   audioFootsteps(dt,Math.abs(actor.speed),Math.abs(actor.speed)>2.4);
   updateZombie(dt);
+  combatUpdate(dt);
   actor.root.position.set(actor.x,0,actor.z);actor.root.rotation.y=-actor.yaw;
   if(inp.use){inp.use=false;useSpot()}
 }
@@ -119,11 +122,12 @@ function boot(){
   img.onerror=()=>assetStatus('bg',false);img.src='bg.jpg';
   $('start').addEventListener('click',()=>{if($('start').disabled)return;$('intro').style.display='none';running=true;last=performance.now();audioStart();say('Qualcosa si muove nella piazza.',3400)});
   const home=()=>{const g=img2g(330,790);actor.x=g[0];actor.z=g[1];actor.yaw=.3;actor.speed=0};home();
+  combatInit();
   $('reset').addEventListener('click',home);
   $('aud').addEventListener('click',()=>{const on=audioToggle();$('aud').textContent=on?'♪ AUDIO':'♪ MUTO'});$('dbgb').addEventListener('click',()=>{dbgOn=!dbgOn;$('dbg').hidden=!dbgOn;if(dbgOn)drawDebug()});
   (function loop(now){requestAnimationFrame(loop);if(!running)return;const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);render();pan();if(dbgOn)drawDebug()})(performance.now());
 }
-window.__noctis={probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),depthOccluders:foregroundMeshes.length,occlusionMode:'depth-only'}),
+window.__noctis={combat:combatProbe,probe:()=>({x:actor.x,z:actor.z,yaw:actor.yaw,speed:actor.speed,feet:g2img(actor.x,actor.z),depthOccluders:foregroundMeshes.length,occlusionMode:'depth-only'}),
   setImg:(u,v,yaw=actor.yaw)=>{const g=img2g(u,v);actor.x=g[0];actor.z=g[1];actor.yaw=yaw;actor.speed=0;resolve({x:actor.x,z:actor.z});update(.016);render();return window.__noctis.probe()},
   step:(n,f,t,run)=>{for(let i=0;i<n;i++){inp.keys={KeyW:f>0,KeyS:f<0,KeyA:t<0,KeyD:t>0,ShiftLeft:!!run};update(1/60)}inp.keys={};render();return window.__noctis.probe()},
   use:()=>{inp.use=true;update(.016)},start:()=>{if($('start').disabled)return false;$('intro').style.display='none';running=true;last=performance.now()},debug:(on)=>{dbgOn=on;$('dbg').hidden=!on;if(on)drawDebug()}};

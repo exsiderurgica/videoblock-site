@@ -63,7 +63,7 @@ function zCollide(prev){
   ZOM.x=p.x;ZOM.z=p.z;return hit;
 }
 function updateZombie(dt){
-  if(!ZOM.root)return;
+  if(!ZOM.root||ZOM.dead)return;
   ZOM.t+=dt;
   const dx=actor.x-ZOM.x,dz=actor.z-ZOM.z,dist=Math.hypot(dx,dz);
   const want=Math.atan2(dx,-dz);
@@ -76,10 +76,20 @@ function updateZombie(dt){
   const prev={x:ZOM.x,z:ZOM.z};
   ZOM.x+=Math.sin(ZOM.yaw)*ZOM.speed*dt;ZOM.z+=-Math.cos(ZOM.yaw)*ZOM.speed*dt;
   zCollide(prev);
+  // Distanza effettiva percorsa: su collisione non animare piedi fermi.
+  const walked=Math.hypot(ZOM.x-prev.x,ZOM.z-prev.z);
+  ZOM.actualSpeed=walked/Math.max(dt,.0001);
+  if(walked<.0005)ZOM.speed*=.72;
+  ZOM.walkPhase=(ZOM.walkPhase||0)+walked*3.1;
   ZOM.root.position.set(ZOM.x,0,ZOM.z);ZOM.root.rotation.y=-ZOM.yaw;
-  if(ZOM.H&&ZOM.H.src){srcAnim(ZOM.H,dt,Math.max(ZOM.speed,.16),turn/Math.max(dt,1e-3),false);zShamble(ZOM.H,ZOM.t,ZOM.speed);ZOM.H.m.updateMatrixWorld(true)}
-  /* audio: strascico a ogni mezzo passo, lamento a intervalli */
-  ZOM.ph+=dt*ZOM.speed*2.6;
+  if(ZOM.H&&ZOM.H.src){
+    const strideSpeed=ZOM.actualSpeed*SRC_SPEED.Walk/.95;
+    srcAnim(ZOM.H,dt,strideSpeed,turn/Math.max(dt,1e-3),false);
+    zShamble(ZOM.H,ZOM.walkPhase,ZOM.actualSpeed);
+    ZOM.H.m.updateMatrixWorld(true)
+  }
+  /* audio: passi sincronizzati con i metri anziche' con il tempo */
+  ZOM.ph+=walked*(Math.PI/.36);
   const u=g2img(ZOM.x,ZOM.z)[0],pan=Math.max(-1,Math.min(1,(u-IW/2)/(IW/2)));
   const vol=Math.max(0,Math.min(1,3.4/(1+dist*dist*.1)));
   const half=Math.floor(ZOM.ph/Math.PI);

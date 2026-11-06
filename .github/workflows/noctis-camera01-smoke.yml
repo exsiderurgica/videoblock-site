@@ -2,7 +2,7 @@ name: NOCTIS Camera 01 - verifica browser reale
 on:
   push:
     branches:
-      - noctis/pulcinella-zombie-walk-test-20261106
+      - noctis/camera01-pistola-test-20261106
     paths:
       - ".github/workflows/noctis-camera01-smoke.yml"
       - "noctis/re1-camera01/**"
@@ -26,6 +26,7 @@ jobs:
         run: |
           python -m http.server 8123 --bind 127.0.0.1 > /tmp/noctis-server.log 2>&1 &
           python noctis/re1-camera01/tests/headless_smoke.py
+          python noctis/re1-camera01/tests/combat_smoke.py
       - name: Pubblica anteprima compatta nel log per revisione visiva
         if: always()
         run: |
